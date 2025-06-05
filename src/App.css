@@ -1,0 +1,2576 @@
+/* Base styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
+    "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #333;
+  background-color: #f9fafb;
+}
+
+/* TaskFlow container */
+.task-flow {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Auth pages (Login & Register) */
+.auth-container {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.auth-left {
+  flex: 1;
+  background-image: url("/images/taskflow-bg.png");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+}
+
+.auth-content {
+  max-width: 450px;
+  z-index: 1;
+}
+
+.auth-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #1a202c;
+}
+
+.auth-description {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: #4a5568;
+}
+
+.auth-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background-color: #fff;
+}
+
+.auth-form-container {
+  width: 100%;
+  max-width: 400px;
+}
+
+.auth-logo {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.logo-image {
+  height: 40px;
+  width: auto;
+  margin-right: 0.5rem;
+}
+
+.logo-icon {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #3a6ea5;
+  margin-right: 0.5rem;
+}
+
+.logo-text {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #3a6ea5;
+}
+
+.auth-form-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  color: #1a202c;
+}
+
+.auth-form {
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: #4a5568;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.375rem;
+  background-color: #fff;
+  transition: border-color 0.15s ease-in-out;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #3a6ea5;
+  box-shadow: 0 0 0 3px rgba(58, 110, 165, 0.1);
+}
+
+.password-input-container {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #718096;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-group-inline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+}
+
+.checkbox-container input[type="checkbox"] {
+  margin-right: 0.5rem;
+}
+
+.forgot-password {
+  color: #3a6ea5;
+  font-size: 0.875rem;
+  text-decoration: none;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 0.375rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+}
+
+.btn-primary {
+  background-color: #0f2b46;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #0a1f33;
+}
+
+.btn-block {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+}
+
+.btn-large {
+  padding: 0.75rem 1.5rem;
+  font-size: 1.125rem;
+}
+
+.auth-footer {
+  text-align: center;
+  font-size: 0.875rem;
+  color: #4a5568;
+  margin-top: 1.5rem;
+}
+
+.auth-link {
+  color: #3a6ea5;
+  font-weight: 500;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.auth-link:hover {
+  text-decoration: underline;
+}
+
+/* Dashboard styles */
+.dashboard-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Add styles for the notification popup */
+.notifications-popup {
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  width: 300px;
+  background-color: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  z-index: 1000;
+  padding: 1rem;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* Update navbar styles */
+.navbar {
+  background-color: #3a6ea5;
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-avatar {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background-color: #2c5282;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.navbar-nav {
+  display: flex;
+  gap: 2rem;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.nav-link:hover {
+  text-decoration: underline;
+}
+
+.nav-link.active {
+  font-weight: 600;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.notification-icon {
+  position: relative;
+  cursor: pointer;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #e53e3e;
+  color: white;
+  font-size: 0.75rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Navbar logo */
+.navbar-logo {
+  height: 30px;
+  width: auto;
+  margin-right: 0.75rem;
+}
+
+.dashboard-content {
+  flex: 1;
+  padding: 2rem;
+  width: 100%;
+}
+
+.dashboard-full-width {
+  width: 100%;
+  padding: 0;
+}
+
+/* Updated dashboard styles */
+.welcome-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.dashboard-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #1a202c;
+}
+
+.dashboard-subtitle {
+  font-size: 1.125rem;
+  color: #4a5568;
+}
+
+/* Stats cards */
+.stats-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.stat-card {
+  background-color: white;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.stat-icon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.5rem;
+  background-color: #ebf5ff;
+  color: #3a6ea5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-content {
+  flex: 1;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem 0;
+  color: #1a202c;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: #718096;
+  margin: 0;
+}
+
+/* Dashboard sections layout */
+.dashboard-sections {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+/* Recent updates section */
+.recent-updates-section {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  height: auto;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+.section-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #1a202c;
+  text-align: left;
+}
+
+.updates-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  overflow-y: auto;
+  max-height: 350px;
+}
+
+.update-card {
+  background-color: #f7fafc;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border-left: 3px solid #3a6ea5;
+}
+
+.update-header {
+  margin-bottom: 0.75rem;
+}
+
+.update-team {
+  font-weight: 600;
+  margin: 0 0 0.25rem 0;
+  color: #2d3748;
+}
+
+.update-chapter {
+  font-size: 0.875rem;
+  color: #718096;
+  margin: 0;
+}
+
+.progress-container {
+  height: 0.5rem;
+  background-color: #e2e8f0;
+  border-radius: 0.25rem;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: #48bb78;
+  border-radius: 0.25rem;
+  transition: width 0.3s ease-in-out;
+}
+
+.progress-label {
+  font-size: 0.75rem;
+  color: #718096;
+  text-align: right;
+}
+
+/* Recent activity section */
+.recent-activity-section {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  height: auto;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  overflow-y: auto;
+  max-height: 350px;
+}
+
+.activity-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  background-color: #f7fafc;
+  border-left: 3px solid #3a6ea5;
+}
+
+.activity-content {
+  flex: 1;
+}
+
+.activity-team {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: #2d3748;
+}
+
+.activity-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #718096;
+}
+
+.activity-chapter,
+.activity-message,
+.activity-due {
+  display: inline-block;
+}
+
+.activity-time {
+  font-size: 0.75rem;
+  color: #a0aec0;
+  white-space: nowrap;
+  margin-left: 1rem;
+}
+
+/* Main container */
+.task-hub {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header styles */
+.header {
+  background-color: #3a6ea5;
+  color: white;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #2c5282;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.header-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.nav-links {
+  display: flex;
+  gap: 24px;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+}
+
+.nav-link:hover {
+  text-decoration: underline;
+}
+
+.nav-link.active {
+  font-weight: 600;
+}
+
+/* Main content */
+.main-content {
+  flex: 1;
+  padding: 24px;
+  background-color: #f9fafb;
+}
+
+/* Team Selection Page */
+.team-selection {
+  width: 100%;
+}
+
+.page-title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.search-and-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.search-container {
+  position: relative;
+  width: 300px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 16px;
+  padding-right: 40px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.search-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  width: 18px;
+  height: 18px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: background-color 0.2s;
+  border: none;
+  cursor: pointer;
+  padding: 8px 16px;
+}
+
+.btn-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 6px;
+}
+
+.btn-primary {
+  background-color: #3a6ea5;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #2c5282;
+}
+
+.btn-success {
+  background-color: #10b981;
+  color: white;
+}
+
+.btn-success:hover {
+  background-color: #059669;
+}
+
+.teams-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.team-card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.team-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.team-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.btn-delete {
+  background: none;
+  border: none;
+  color: #ef4444;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-delete:hover {
+  background-color: #fee2e2;
+}
+
+.delete-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.team-info {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #4b5563;
+}
+
+/* Team where user is a member */
+.user-member-team {
+  border-left: 4px solid #3a6ea5;
+}
+
+.team-member-status {
+  font-size: 0.75rem;
+  color: #3a6ea5;
+  font-weight: 600;
+  margin: 4px 0;
+}
+
+.btn-manage {
+  background-color: #3a6ea5;
+  color: white;
+  width: 100%;
+  margin: 16px 0 12px 0;
+}
+
+.btn-manage:hover {
+  background-color: #2c5282;
+}
+
+/* Task indicators */
+.task-indicators {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.task-indicator {
+  height: 8px;
+  flex: 1;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.task-indicator.completed {
+  background-color: #10b981;
+  transition: background-color 0.3s ease;
+}
+
+.task-indicator.in-progress {
+  background-color: #d1d5db;
+}
+
+/* Team Dashboard Page */
+.team-dashboard {
+  width: 100%;
+}
+
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.btn-back {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  color: #4b5563;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.back-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.team-title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+/* Tasks section */
+.tasks-section {
+  margin-bottom: 32px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.leader-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.tasks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.no-tasks {
+  padding: 24px;
+  text-align: center;
+  background-color: white;
+  border-radius: 6px;
+  color: #6b7280;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.task-title {
+  font-weight: 600;
+  margin: 0 0 4px 0;
+}
+
+.task-date {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0 0 4px 0;
+}
+
+.task-assignee {
+  font-size: 0.875rem;
+  color: #4b5563;
+  margin: 0;
+  font-style: italic;
+}
+
+.task-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.task-status {
+  padding: 4px 12px;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+}
+
+.status-complete {
+  color: #059669;
+  background-color: #d1fae5;
+}
+
+.status-progress {
+  color: #d97706;
+  background-color: #fef3c7;
+}
+
+.task-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+}
+
+.avatar-content {
+  background-color: #f3f4f6;
+  color: #1f2937;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.btn-view {
+  background-color: #3a6ea5;
+  color: white;
+}
+
+.btn-view:hover {
+  background-color: #2c5282;
+}
+
+.btn-done {
+  background-color: #4ade80;
+  color: white;
+}
+
+.btn-done:hover {
+  background-color: #22c55e;
+}
+
+.btn-upload {
+  background-color: #60a5fa;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-upload:hover {
+  background-color: #3b82f6;
+}
+
+.upload-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Team Members Section */
+.team-members-section {
+  margin-top: 40px;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 24px;
+}
+
+.team-members-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.member-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: white;
+  padding: 12px;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  width: calc(20% - 16px);
+  min-width: 180px;
+}
+
+/* Current user highlight */
+.current-user-card {
+  border: 2px solid #3a6ea5;
+  background-color: #f0f7ff;
+}
+
+.current-user-badge {
+  font-size: 0.7rem;
+  color: #3a6ea5;
+  font-weight: normal;
+  margin-left: 4px;
+}
+
+.member-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f3f4f6;
+}
+
+.member-info {
+  flex: 1;
+}
+
+.member-name {
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  font-size: 0.875rem;
+}
+
+.member-task {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Modal styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #e5edf9;
+  padding: 32px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
+  position: relative;
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+.create-team-modal {
+  max-width: 400px;
+}
+
+.modal-title-c {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 0 100px;
+  text-align: center;
+}
+
+.modal-subtitle-c {
+  font-size: 0.875rem;
+  color: #4b5563;
+  margin: -20px 0 24px 0;
+  text-align: center;
+}
+
+.join-team-modal {
+  max-width: 400px;
+}
+
+.modal-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  text-align: center;
+}
+
+.modal-subtitle {
+  font-size: 0.875rem;
+  color: #4b5563;
+  margin: 0 0 24px 0;
+  text-align: center;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #4b5563;
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 16px;
+  background-color: white;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #3a6ea5;
+  box-shadow: 0 0 0 2px rgba(58, 110, 165, 0.2);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.btn-cancel {
+  background-color: #f3f4f6;
+  color: #4b5563;
+  padding: 0.75rem 1.5rem;
+  min-width: 100px;
+  max-width: fit-content;
+}
+
+.btn-cancel:hover {
+  background-color: #e5e7eb;
+}
+
+.btn-submit,
+.btn-join,
+.btn-save {
+  background-color: #0f2b46;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  min-width: 100px;
+  max-width: fit-content;
+}
+
+.btn-submit:hover,
+.btn-join:hover,
+.btn-save:hover {
+  background-color: #0a1f33;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.btn-assign {
+  background-color: #0f2b46;
+  color: white;
+  padding: 12px 24px;
+  font-weight: 600;
+  max-width:fit-content;
+  margin-right: 33%;
+}
+
+.btn-assign:hover {
+  background-color: #0a1f33;
+}
+
+h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+}
+
+/* User profile dropdown */
+.user-profile-dropdown {
+  position: relative;
+  margin-left: 1rem;
+}
+
+.user-profile-button {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 0;
+}
+
+.user-avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background-color: #2c5282;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: white;
+  overflow: hidden;
+}
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dropdown-icon {
+  width: 1rem;
+  height: 1rem;
+  margin-left: 0.25rem;
+  transition: transform 0.2s;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  width: 220px;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.dropdown-header {
+  padding: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.dropdown-user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown-username {
+  font-weight: 600;
+  color: #1a202c;
+  margin-bottom: 0.25rem;
+}
+
+.dropdown-email {
+  font-size: 0.875rem;
+  color: #718096;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background-color: #e2e8f0;
+  margin: 0.5rem 0;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: none;
+  border: none;
+  text-align: left;
+  font-size: 0.875rem;
+  color: #4a5568;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.dropdown-item:hover {
+  background-color: #f7fafc;
+}
+
+.dropdown-item-icon {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.75rem;
+  color: #718096;
+}
+
+/* Settings Modal */
+.settings-modal {
+  max-width: 500px;
+  max-height: 700px;
+  background-color: white;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.profile-pic-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.profile-pic-container {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #4a5568;
+}
+
+.profile-pic-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-pic-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-pic-upload-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  font-size: 0.75rem;
+  padding: 0.25rem;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  transition: background-color 0.2s;
+}
+
+.profile-pic-upload-label:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.profile-pic-upload {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.theme-toggle-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.theme-option {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  color: #718096;
+}
+
+.theme-option.active {
+  color: #3a6ea5;
+  font-weight: 500;
+}
+
+.theme-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.toggle-switch {
+  position: relative;
+  width: 3rem;
+  height: 1.5rem;
+  border-radius: 1.5rem;
+  background-color: #e2e8f0;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.toggle-switch.active {
+  background-color: #3a6ea5;
+}
+
+.toggle-slider {
+  position: absolute;
+  top: 0.25rem;
+  left: 0.25rem;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background-color: white;
+  transition: transform 0.2s;
+}
+
+.toggle-switch.active .toggle-slider {
+  transform: translateX(1.5rem);
+}
+
+.btn-save {
+  background-color: #3a6ea5;
+  color: white;
+}
+
+.btn-save:hover {
+  background-color: #2c5282;
+}
+
+/* Dark mode styles */
+.dark-mode {
+  background-color: #1a202c;
+  color: #e2e8f0;
+}
+
+.dark-mode .navbar {
+  background-color: #2d3748;
+}
+
+.dark-mode .dropdown-menu {
+  background-color: #2d3748;
+  border: 1px solid #4a5568;
+}
+
+.dark-mode .dropdown-username {
+  color: #e2e8f0;
+}
+
+.dark-mode .dropdown-email {
+  color: #a0aec0;
+}
+
+.dark-mode .dropdown-divider {
+  background-color: #4a5568;
+}
+
+.dark-mode .dropdown-item {
+  color: #e2e8f0;
+}
+
+.dark-mode .dropdown-item:hover {
+  background-color: #4a5568;
+}
+
+.dark-mode .settings-modal {
+  background-color: #2d3748;
+}
+
+.dark-mode .form-control {
+  background-color: #4a5568;
+  border-color: #4a5568;
+  color: #e2e8f0;
+}
+
+.dark-mode .form-control::placeholder {
+  color: #a0aec0;
+}
+
+.dark-mode .form-control:focus {
+  border-color: #3a6ea5;
+}
+
+.dark-mode .btn-cancel {
+  background-color: #4a5568;
+  color: #e2e8f0;
+}
+
+/* Fix for the welcome text in dark mode */
+.dark-mode .dashboard-title,
+.dark-mode .dashboard-subtitle,
+.dark-mode .page-title,
+.dark-mode .team-title,
+.dark-mode .modal-title,
+.dark-mode label,
+.dark-mode h2,
+.dark-mode h3,
+.dark-mode h4 {
+  color: #e2e8f0;
+}
+
+.dark-mode .stat-card,
+.dark-mode .recent-updates-section,
+.dark-mode .recent-activity-section,
+.dark-mode .update-card,
+.dark-mode .activity-item,
+.dark-mode .team-card,
+.dark-mode .task-item,
+.dark-mode .member-card,
+.dark-mode .notifications-popup {
+  background-color: #2d3748;
+  border-color: #4a5568;
+}
+
+.dark-mode .stat-icon {
+  background-color: #4a5568;
+  color: #90cdf4;
+}
+
+.dark-mode .stat-value {
+  color: #e2e8f0;
+}
+
+.dark-mode .stat-label,
+.dark-mode .section-title,
+.dark-mode .update-team,
+.dark-mode .update-chapter,
+.dark-mode .progress-label,
+.dark-mode .activity-team,
+.dark-mode .activity-details,
+.dark-mode .team-info,
+.dark-mode .task-date,
+.dark-mode .task-assignee,
+.dark-mode .member-task,
+.dark-mode .notification-chapter,
+.dark-mode .notification-due,
+.dark-mode .notification-message,
+.dark-mode .notification-time {
+  color: #a0aec0;
+}
+
+.dark-mode .progress-container {
+  background-color: #4a5568;
+}
+
+.dark-mode .main-content {
+  background-color: #1a202c;
+}
+
+.dark-mode .notifications-title {
+  color: #e2e8f0;
+}
+
+.dark-mode .notification-team {
+  color: #e2e8f0;
+}
+
+.dark-mode .team-name,
+.dark-mode .task-title,
+.dark-mode .member-name {
+  color: #e2e8f0;
+}
+
+.dark-mode .status-complete {
+  color: #68d391;
+  background-color: rgba(104, 211, 145, 0.2);
+}
+
+.dark-mode .status-progress {
+  color: #f6ad55;
+  background-color: rgba(246, 173, 85, 0.2);
+}
+
+.dark-mode .avatar-content {
+  background-color: #4a5568;
+  color: #e2e8f0;
+}
+
+.dark-mode .no-tasks {
+  color: #a0aec0;
+  background-color: #2d3748;
+}
+
+/* Media queries for responsive design */
+@media (max-width: 768px) {
+  .dropdown-menu {
+    width: 100%;
+    right: -1rem;
+  }
+
+  .theme-toggle {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
+
+/* Fix notification text color in light mode */
+.notification-item {
+  padding: 10px;
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 5px;
+}
+
+.notification-team {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: #2d3748; /* Darker color for better visibility in light mode */
+}
+
+.notification-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.notification-chapter,
+.notification-due,
+.notification-message {
+  font-size: 0.875rem;
+  color: #4a5568; /* Darker color for better visibility in light mode */
+}
+
+.notification-time {
+  font-size: 0.75rem;
+  color: #718096;
+  margin-top: 0.25rem;
+}
+
+/* Fix modal text visibility in dark mode */
+.dark-mode .modal-content {
+  background-color: #2d3748;
+  color: #e2e8f0; /* Light text color for dark mode */
+}
+
+.dark-mode .modal-title,
+.dark-mode .modal-subtitle,
+.dark-mode .form-group label,
+.dark-mode h2 {
+  color: #e2e8f0; /* Light text color for dark mode */
+}
+
+.dark-mode .form-control {
+  background-color: #4a5568;
+  border-color: #4a5568;
+  color: #e2e8f0;
+}
+
+.dark-mode .form-control::placeholder {
+  color: #a0aec0;
+}
+
+.dark-mode .btn-cancel {
+  background-color: #4a5568;
+  color: #e2e8f0;
+}
+
+.dark-mode .btn-submit,
+.dark-mode .btn-join,
+.dark-mode .btn-assign {
+  background-color: #3a6ea5;
+  color: #e2e8f0;
+}
+
+/* Fix notification popup in dark mode */
+.dark-mode .notifications-popup {
+  background-color: #2d3748;
+  border: 1px solid #4a5568;
+}
+
+.dark-mode .notifications-title {
+  color: #e2e8f0;
+}
+
+.dark-mode .notification-item {
+  border-bottom: 1px solid #4a5568;
+}
+
+.dark-mode .notification-team {
+  color: #e2e8f0;
+}
+
+.dark-mode .notification-chapter,
+.dark-mode .notification-due,
+.dark-mode .notification-message {
+  color: #a0aec0;
+}
+
+/* Add these styles to your existing App.css */
+
+/* Dashboard actions with two buttons */
+.dashboard-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.btn-secondary {
+  background-color: #4a6da7;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #3a5d97;
+}
+
+/* Active Teams Modal styles */
+.active-teams-modal {
+  max-width: 600px;
+}
+
+.active-teams-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 0.5rem 0;
+}
+
+.active-team-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.active-team-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.active-team-info {
+  flex: 1;
+}
+
+.active-team-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+  color: #1a202c;
+}
+
+.active-team-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.875rem;
+  color: #4a5568;
+  margin: 0 0 0.75rem 0;
+}
+
+.active-team-progress {
+  margin-top: 0.5rem;
+}
+
+.no-tasks-label {
+  font-size: 0.75rem;
+  color: #718096;
+  font-style: italic;
+}
+
+.progress-label {
+  font-size: 0.75rem;
+  color: #718096;
+  display: block;
+  margin-top: 0.25rem;
+}
+
+.btn-sm {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.875rem;
+}
+
+.no-teams {
+  padding: 2rem;
+  text-align: center;
+  color: #718096;
+}
+
+/* Dark mode adjustments for active teams modal */
+.dark-mode .active-team-item {
+  background-color: #2d3748;
+}
+
+.dark-mode .active-team-name {
+  color: #e2e8f0;
+}
+
+.dark-mode .active-team-details {
+  color: #a0aec0;
+}
+
+.dark-mode .progress-container {
+  background-color: #4a5568;
+}
+
+.dark-mode .no-teams {
+  color: #a0aec0;
+}
+
+.dark-mode .progress-label,
+.dark-mode .no-tasks-label {
+  color: #a0aec0;
+}
+
+/* Add these styles to your existing App.css */
+
+/* Make stat cards clickable */
+.stat-card.clickable {
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+}
+
+.stat-card.clickable:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  background-color: #f0f7ff;
+}
+
+.dark-mode .stat-card.clickable:hover {
+  background-color: #3a4a63;
+}
+
+/* Tasks Modal styles */
+.tasks-modal {
+  max-width: 600px;
+}
+
+.tasks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 0.5rem 0;
+}
+
+.task-item-modal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.task-item-modal:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.task-info {
+  flex: 1;
+}
+
+.task-title {
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  color: #1a202c;
+}
+
+.task-team,
+.task-date,
+.task-assignee {
+  font-size: 0.875rem;
+  color: #4a5568;
+  margin: 0 0 4px 0;
+}
+
+.no-items {
+  padding: 2rem;
+  text-align: center;
+  color: #718096;
+}
+
+/* Dark mode adjustments for tasks modal */
+.dark-mode .task-item-modal {
+  background-color: #2d3748;
+}
+
+.dark-mode .task-title {
+  color: #e2e8f0;
+}
+
+.dark-mode .task-team,
+.dark-mode .task-date,
+.dark-mode .task-assignee {
+  color: #a0aec0;
+}
+
+.dark-mode .no-items {
+  color: #a0aec0;
+}
+
+/* Add these styles to your existing App.css */
+
+/* File Upload Modal styles */
+.file-upload-modal {
+  max-width: 500px;
+}
+
+.task-info-banner {
+  background-color: #f0f7ff;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid #3a6ea5;
+}
+
+.dark-mode .task-info-banner {
+  background-color: #2d3748;
+  border-left: 4px solid #4a6da7;
+}
+
+.upload-type-selector {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.upload-type-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background-color: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.upload-type-btn.active {
+  background-color: #ebf5ff;
+  border-color: #3a6ea5;
+  color: #3a6ea5;
+}
+
+.dark-mode .upload-type-btn {
+  background-color: #2d3748;
+  border-color: #4a5568;
+}
+
+.dark-mode .upload-type-btn.active {
+  background-color: #2c5282;
+  border-color: #4a6da7;
+  color: #e2e8f0;
+}
+
+.upload-type-icon {
+  width: 2rem;
+  height: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.file-upload-container {
+  position: relative;
+  margin-bottom: 0.5rem;
+}
+
+.file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.file-upload-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background-color: #f7fafc;
+  border: 1px dashed #cbd5e0;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.file-upload-label:hover {
+  background-color: #ebf5ff;
+  border-color: #3a6ea5;
+}
+
+.dark-mode .file-upload-label {
+  background-color: #2d3748;
+  border-color: #4a5568;
+}
+
+.dark-mode .file-upload-label:hover {
+  background-color: #2c5282;
+  border-color: #4a6da7;
+}
+
+.file-help-text {
+  font-size: 0.75rem;
+  color: #718096;
+  margin-top: 0.5rem;
+}
+
+.dark-mode .file-help-text {
+  color: #a0aec0;
+}
+
+/* File View Modal styles */
+.file-view-modal {
+  max-width: 600px;
+}
+
+.submission-date {
+  font-size: 0.875rem;
+  color: #718096;
+  margin-top: 0.25rem;
+}
+
+.dark-mode .submission-date {
+  color: #a0aec0;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.loading-spinner {
+  width: 2rem;
+  height: 2rem;
+  border: 3px solid #e2e8f0;
+  border-top-color: #3a6ea5;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.submission-content {
+  padding: 1.5rem;
+  background-color: #f7fafc;
+  border-radius: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.dark-mode .submission-content {
+  background-color: #2d3748;
+}
+
+.file-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.file-icon-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.file-icon {
+  width: 4rem;
+  height: 4rem;
+  color: #3a6ea5;
+}
+
+.dark-mode .file-icon {
+  color: #4a6da7;
+}
+
+.file-name {
+  font-weight: 500;
+  text-align: center;
+}
+
+.file-actions,
+.link-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.link-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.link-info {
+  font-weight: 500;
+}
+
+.link-container {
+  padding: 0.75rem 1rem;
+  background-color: #ebf5ff;
+  border-radius: 0.5rem;
+  word-break: break-all;
+}
+
+.dark-mode .link-container {
+  background-color: #2c5282;
+}
+
+.doc-link {
+  color: #3a6ea5;
+  text-decoration: none;
+}
+
+.doc-link:hover {
+  text-decoration: underline;
+}
+
+.dark-mode .doc-link {
+  color: #90cdf4;
+}
+
+.btn-icon {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.5rem;
+}
+
+/* Submission indicator in task list */
+.submission-indicator {
+  margin-top: 0.5rem;
+}
+
+.submission-badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background-color: #ebf5ff;
+  color: #3a6ea5;
+  border-radius: 0.25rem;
+}
+
+.dark-mode .submission-badge {
+  background-color: #2c5282;
+  color: #90cdf4;
+}
+
+/* Add these styles to your existing App.css file */
+
+.btn-cancel-upload {
+  background-color: #ef4444;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-cancel-upload:hover {
+  background-color: #dc2626;
+}
+
+.cancel-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.dark-mode .btn-cancel-upload {
+  background-color: #b91c1c;
+}
+
+.dark-mode .btn-cancel-upload:hover {
+  background-color: #991b1b;
+}
+
+/* Add these styles for the notification clear button */
+.notification-clear-btn,
+.activity-clear-btn {
+  background: none;
+  border: none;
+  color: #a0aec0;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.notification-clear-btn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #e53e3e;
+}
+
+.dark-mode .notification-clear-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fc8181;
+}
+
+.notification-clear-icon,
+.activity-clear-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.notification-item,
+.activity-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  background-color: #f7fafc;
+  border-left: 3px solid #3a6ea5;
+  margin-bottom: 8px;
+}
+
+.notification-content,
+.activity-content {
+  flex: 1;
+}
+
+.no-notifications,
+.no-activities {
+  padding: 1rem;
+  text-align: center;
+  color: #718096;
+}
+
+.dark-mode .no-notifications,
+.dark-mode .no-activities {
+  color: #a0aec0;
+}
+
+/* Add styles for the no teams message */
+.no-teams-message {
+  text-align: center;
+  padding: 3rem;
+  background-color: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  grid-column: 1 / -1;
+  width: 100%;
+}
+
+.no-teams-message p {
+  margin-bottom: 0.5rem;
+  color: #4a5568;
+  font-size: 1.1rem;
+}
+
+.no-teams-message .btn {
+  margin-top: 1rem;
+}
+
+.dark-mode .no-teams-message {
+  background-color: #2d3748;
+}
+
+.dark-mode .no-teams-message p {
+  color: #e2e8f0;
+}
+
+/* Center the no updates message */
+.no-updates {
+  text-align: center;
+  padding: 2rem;
+  color: #718096;
+}
+
+.dark-mode .no-updates {
+  color: #a0aec0;
+}
+
+/* Improve dashboard layout */
+.dashboard-main {
+  width: 100%;
+  padding: 0;
+}
+
+.welcome-section {
+  margin-bottom: 2.5rem;
+}
+
+.dashboard-sections {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.dashboard-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.stats-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+@media (max-width: 768px) {
+  .dashboard-sections {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Make stat cards more interactive */
+.stat-card.clickable {
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+}
+
+.stat-card.clickable:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  background-color: #f0f7ff;
+}
+
+.dark-mode .stat-card.clickable:hover {
+  background-color: #3a4a63;
+}
+
+/* Improve recent updates and activity sections */
+.recent-updates-section,
+.recent-activity-section {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.updates-grid,
+.activity-list {
+  flex: 1;
+  overflow: auto;
+  max-height: 400px;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+/* Add styles for the no teams message */
+.no-teams-message {
+  text-align: center;
+  padding: 3rem;
+  background-color: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  grid-column: 1 / -1;
+  width: 100%;
+}
+
+.no-teams-message p {
+  margin-bottom: 0.5rem;
+  color: #4a5568;
+  font-size: 1.1rem;
+}
+
+.no-teams-message .btn {
+  margin-top: 1rem;
+}
+
+.dark-mode .no-teams-message {
+  background-color: #2d3748;
+}
+
+.dark-mode .no-teams-message p {
+  color: #e2e8f0;
+}
+
+/* Center the no updates message */
+.no-updates {
+  text-align: center;
+  padding: 2rem;
+  color: #718096;
+}
+
+.dark-mode .no-updates {
+  color: #a0aec0;
+}
+
+/* Add this for the TaskFlow brand styling */
+.taskflow-brand {
+  font-size: 1.8rem !important;
+  font-weight: 700 !important;
+  font-family: "Montserrat", sans-serif;
+  letter-spacing: 0.5px;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Revert some of the layout changes */
+.dashboard-main {
+  width: 100%;
+}
+
+.dashboard-sections {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.recent-updates-section,
+.recent-activity-section {
+  height: auto;
+  display: block;
+}
+
+.updates-grid,
+.activity-list {
+  max-height: none;
+  overflow: visible;
+}
+
+/* Keep the centered no-updates message */
+.no-updates {
+  text-align: center;
+  padding: 2rem;
+  color: #718096;
+}
+
+.dark-mode .no-updates {
+  color: #a0aec0;
+}
+
+/* Dark mode adjustments */
+.dark-mode .recent-updates-section,
+.dark-mode .recent-activity-section {
+  background-color: #2d3748;
+}
+
+/* Enhance the progress bar styling to make it more visible */
+.progress-bar {
+  height: 100%;
+  background-color: #48bb78;
+  border-radius: 0.25rem;
+  transition: width 0.3s ease-in-out;
+}
+
+.task-indicator.completed {
+  background-color: #10b981;
+  transition: background-color 0.3s ease;
+}
+
+/* Add these styles for the task indicators in update cards */
+.update-card .task-indicators {
+  display: flex;
+  gap: 4px;
+  margin: 8px 0;
+}
+
+.update-card .task-indicator {
+  height: 6px;
+  flex: 1;
+  border-radius: 3px;
+  transition: background-color 0.3s ease;
+}
+
+.update-card .task-indicator.completed {
+  background-color: #10b981;
+}
+
+.update-card .task-indicator.in-progress {
+  background-color: #d1d5db;
+}
+
+.update-card .no-tasks-indicator {
+  font-size: 0.75rem;
+  color: #718096;
+  font-style: italic;
+  width: 100%;
+  text-align: center;
+}
+
+.update-card .task-completion-text {
+  font-size: 0.75rem;
+  color: #718096;
+  text-align: center;
+  margin-top: 4px;
+}
+
+.dark-mode .update-card .task-completion-text,
+.dark-mode .update-card .no-tasks-indicator {
+  color: #a0aec0;
+}
+
+/* Make the progress bar less prominent since we have task indicators now */
+.update-card .progress-container {
+  height: 0.25rem;
+  margin-bottom: 0.25rem;
+  opacity: 0.7;
+}
