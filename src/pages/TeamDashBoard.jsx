@@ -5,6 +5,10 @@ import { ArrowLeft, Upload, UserPlus, X } from "../components/icons"
 import FileUploadModal from "../components/FileUploadModal"
 import FileViewModal from "../components/FileViewModal"
 
+// Other imports
+import Swal from "sweetalert2"
+import withReactContent from "sweetalert2-react-content"
+
 export default function TeamDashboard({
   team,
   onBackToTeams,
@@ -137,17 +141,26 @@ export default function TeamDashboard({
     }
   }
 
+
+
   // Function to handle file upload submission
-  const handleFileUploadSubmit = (submissionData) => {
+  const handleFileUploadSubmit = async (submissionData) => {
     // Update the task with the submission data
-    const updatedTasks = tasks.map((task) =>
-      task.id === selectedTask.id ? { ...task, submission: submissionData } : task,
-    )
-    setTasks(updatedTasks)
+
 
     // Call the parent component's function to update the task
-    if (onFileUpload) {
-      onFileUpload(selectedTask.id, submissionData)
+    const fileUpload = await onFileUpload(selectedTask.id, submissionData)
+    if (fileUpload !== "error") {
+      const updatedTasks = tasks.map((task) =>
+        task.id === selectedTask.id ? { ...task, submission: submissionData } : task,
+      )
+      setTasks(updatedTasks)
+    } else {
+      withReactContent(Swal).fire({
+        icon: "error",
+        title: "Submission Failed",
+        text: "Something went wrong!",
+      })
     }
 
     // Close the modal
@@ -230,7 +243,7 @@ export default function TeamDashboard({
                     {task.submission && (
                       <div className="submission-indicator">
                         <span className="submission-badge">
-                          {task.submission.type === "file" ? "File Uploaded" : "Google Docs Link"}
+                          {typeof task.submission == "string" && task.submission.startsWith("uploads/") ? "File Uploaded" : "Google Docs Link"}
                         </span>
                       </div>
                     )}
@@ -285,7 +298,7 @@ export default function TeamDashboard({
             <div className={`member-card ${member.id === currentUser.id ? "current-user-card" : ""}`} key={member.id}>
               <div className="member-avatar">
                 <div className="avatar-content">
-                  <img style={{objectFit: 'cover' }} width='50' src={`http://localhost:8000/storage/${member.profile_picture}`} alt="avatar" />
+                  <img style={{ objectFit: 'cover' }} width='50' src={`http://localhost:8000/storage/${member.profile_picture}`} alt="avatar" />
                 </div>
               </div>
               <div className="member-info">
