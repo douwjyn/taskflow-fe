@@ -28,9 +28,7 @@ export default function Dashboard({
   const [pendingTasksCount, setPendingTasksCount] = useState(0)
   const [upcomingDeadlinesCount, setUpcomingDeadlinesCount] = useState(0)
 
-  // Get all tasks from all teams
-  const getAllTasks = async() => {
-
+  const getAllTasks = async () => {
     const response = await fetch(`http://localhost:8000/api/tasks/${currentUser.id}`, {
       headers: {
         "Content-Type": "application/json",
@@ -38,23 +36,31 @@ export default function Dashboard({
     })
 
     const data = await response.json()
+    const { teams, tasks } = data
 
-    console.log(data)
-    return data.tasks || []
-    // teams.forEach((team) => {
-    //   team.tasks.forEach((task) => {
-    //     const assignee = team.members.find((member) => member.id === task.assigneeId)
-    //     allTasks.push({
-    //       id: task.id,
-    //       title: task.title,
-    //       team: team.name,
-    //       dueDate: task.dueDate || team.dueDate,
-    //       assignee: assignee ? assignee.name : "Unassigned",
-    //       status: task.completed ? "completed" : "pending",
-    //     })
-    //   })
-    // })
-    // return allTasks
+    const teamByTaskId = {}
+    teams.forEach(team => {
+      (team.tasks || []).forEach(task => {
+        teamByTaskId[task.id] = team
+      })
+    })
+
+    const allTasks = (tasks || []).map(task => {
+      const team = teamByTaskId[task.id]
+      // If task.users is an array, take the first user as assignee
+      const assignee = Array.isArray(task.users) && task.users.length > 0 ? task.users[0] : null
+
+      return {
+        id: task.id,
+        title: task.title,
+        team: team ? team.name : "Unknown Team",
+        dueDate: task.due_date || (team ? team.due_date : null),
+        assignee: assignee ? assignee.name : "Unassigned",
+        status: task.status || (task.completed ? "completed" : "pending"),
+      }
+    })
+
+    return allTasks
   }
 
   // Handle stat card clicks
@@ -67,6 +73,8 @@ export default function Dashboard({
         dueDate: team.dueDate,
       }))
 
+    console.log("userTeamsList", teams)
+
     setModalContent({
       title: "Your Active Teams",
       items: userTeamsList,
@@ -75,8 +83,10 @@ export default function Dashboard({
 
   const handleCompletedTasksClick = async () => {
     let tasks = await getAllTasks()
+
     if (tasks) {
-      const completedTasks = tasks.filter((task) => task.status === "completed")
+      const completedTasks = tasks.filter((task) => task.status === "Completed")
+      console.log("completedTasks", completedTasks)
       setModalContent({
         title: "Completed Tasks",
         items: completedTasks,
@@ -248,7 +258,7 @@ export default function Dashboard({
                           Array.from({ length: update.totalTasks }).map((_, index) => (
                             <div
                               key={index}
-                              className={`task-indicator ${index < update.completedTasks ? "completed" : "in-progress"}`}
+                              className={`task-indicator ${index < update.completedTasks ? "Completed" : "in-progress"}`}
                             ></div>
                           ))
                         ) : (
@@ -292,7 +302,7 @@ export default function Dashboard({
       </main>
 
       {/* Modal for displaying tasks or teams */}
-      {modalContent && <TasksModal title={modalContent.title} items={modalContent.items} onClose={closeModal} />}
+      {modalContent && <TasksModal title={modalContent.title} items={modalContent.items} onClose={closeModal} formatDate={formatDate}/>}
     </div>
   )
 }

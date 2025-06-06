@@ -13,7 +13,8 @@ export default function TeamDashboard({
   onAssignTask,
   onFileUpload,
   onFileView,
-  formatDate
+  formatDate,
+  handleToggleTaskCompletion
 }) {
   // State for tasks
   const [tasks, setTasks] = useState([])
@@ -33,7 +34,7 @@ export default function TeamDashboard({
           id: task.id,
           title: task.title,
           dueDate: formatDate(task.due_date) || formatDate(team.due_date),
-          completed: task.status == "completed",
+          completed: task.status == "Completed",
           assignee: (assignee.name ? assignee.name.substring(0, 2).toUpperCase() : "NU"),
           assigneeName: assignee.name,
           assigneeId: assignee.id,
@@ -64,11 +65,15 @@ export default function TeamDashboard({
   const isTeamLeader = team && team.leader.id === currentUser.id
 
   // Function to toggle task completion status
-  const toggleTaskCompletion = (taskId) => {
-    const updatedTasks = tasks.map((task) => (task.id === taskId ? { ...task, completed: !task.completed } : task))
-    setTasks(updatedTasks)
-
+  const toggleTaskCompletion = async(taskId) => {
+    const teamId = team.id
+    handleToggleTaskCompletion(teamId, taskId, !tasks.find((task) => task.id === taskId).completed)
     // In a real app, you would also update this in the parent component/database
+    // const updatedTasks = await handleToggleTaskCompletion(teamId, taskId, !tasks.find((task) => task.id === taskId).completed)
+    // setTasks(updatedTasks)
+    // console.log("Updated tasks:", updatedTasks)
+
+    // const updatedTasks = tasks.map((task) => (task.id === taskId ? { ...task, completed: !task.completed } : task))
   }
 
   // Function to handle assign task form submission
@@ -236,7 +241,6 @@ export default function TeamDashboard({
                         View File
                       </button>
                     )}
-
                     {isTeamLeader && (
                       <button className="btn btn-done" onClick={() => toggleTaskCompletion(task.id)}>
                         {task.completed ? "Mark as Incomplete" : "Mark as Done"}

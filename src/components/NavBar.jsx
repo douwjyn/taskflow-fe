@@ -47,7 +47,6 @@ export default function NavBar({
     e.stopPropagation() // Prevent notification panel from closing
     onRemoveNotification(id)
   }
-  console.log("currentUser", currentUser)
   return (
     <header className="navbar">
       <div className="navbar-left">

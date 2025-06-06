@@ -834,60 +834,79 @@ function App() {
 
   // Function to toggle task completion status
   // BACKEND INTEGRATION: Add API call to update task status
-  const handleToggleTaskCompletion = (teamId, taskId, completed) => {
+  const handleToggleTaskCompletion = async(teamId, taskId, completed) => {
     // API call would go here: await updateTaskStatus(teamId, taskId, completed)
+    console.log(`Toggling task ${taskId} completion to ${completed} for team ${teamId}`)
 
-    // Update the teams state with the new task status
-    const updatedTeams = teams.map((team) => {
-      if (team.id === teamId) {
-        // Update the task completion status
-        const updatedTasks = team.tasks.map((task) => (task.id === taskId ? { ...task, completed } : task))
-
-        // Calculate new progress
-        const completedTasks = updatedTasks.filter((task) => task.completed).length
-        const totalTasks = updatedTasks.length
-        const newProgress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0
-
-        // Return updated team
-        return {
-          ...team,
-          tasks: updatedTasks,
-          progress: newProgress,
-        }
-      }
-      return team
+    const response = await fetch(`http://localhost:8000/api/task-update/${taskId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        // team_id: teamId,
+        task: taskId,
+        // completed: completed,
+      }),
     })
+    const data = await response.json()
+    console.log("Task status update response:", data)
+    const d = await fetchUserTeams()
+    console.log("Updated teams after task completion toggle:", d)
+    setTeams(d)
+    // console.log(d)
+    
+    // Update the teams state with the new task status
+    // const updatedTeams = teams.map((team) => {
 
+    //     // Calculate new progress
+    //     const completedTasks = updatedTasks.filter((task) => task.completed).length
+    //     const totalTasks = updatedTasks.length
+    //     const newProgress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0
+
+    //     // Return updated team
+    //     return {
+    //       ...team,
+    //       tasks: updatedTasks,
+    //       progress: newProgress,
+    //     }
+    //   }
+    //   return team
+    // })
+
+    // return updatedTeams
     // Update the teams state
-    setTeams(updatedTeams)
+    // setTeams(updatedTeams)
 
     // Update the team progress in recent updates
-    const team = updatedTeams.find((t) => t.id === teamId)
-    if (team) {
-      // Ensure we update the team progress in recent updates
-      updateTeamProgress(teamId, team.name)
+    // const team = updatedTeams.find((t) => t.id === teamId)
+    // if (team) {
+    //   // Ensure we update the team progress in recent updates
+    //   updateTeamProgress(teamId, team.name)
 
-      // Add an activity for task status change
-      const task = team.tasks.find((t) => t.id === taskId)
-      if (task) {
-        const newActivity = {
-          id: Date.now().toString(),
-          team: team.name,
-          chapter: task.title,
-          message: `Task marked as ${completed ? "complete" : "incomplete"}`,
-          timeAgo: "Just now",
-        }
-        setRecentActivities([newActivity, ...recentActivities.slice(0, 3)])
-      }
-    }
+    //   // Add an activity for task status change
+    //   const task = team.tasks.find((t) => t.id === taskId)
+    //   if (task) {
+    //     const newActivity = {
+    //       id: Date.now().toString(),
+    //       team: team.name,
+    //       chapter: task.title,
+    //       message: `Task marked as ${completed ? "complete" : "incomplete"}`,
+    //       timeAgo: "Just now",
+    //     }
+    //     setRecentActivities([newActivity, ...recentActivities.slice(0, 3)])
+    //   }
+    // }
 
     // Update the selected team if it's the one being modified
-    if (selectedTeam && selectedTeam.id === teamId) {
-      const updatedTeam = updatedTeams.find((team) => team.id === teamId)
-      if (updatedTeam) {
-        setSelectedTeam(updatedTeam)
-      }
-    }
+    // if (selectedTeam && selectedTeam.id === teamId) {
+    //   const updatedTeam = updatedTeams.find((team) => team.id === teamId)
+    //   if (updatedTeam) {
+    //     setSelectedTeam(updatedTeam)
+    //   }
+    // }
+
   }
 
   // Function to update team progress in recent updates
@@ -1018,6 +1037,7 @@ function App() {
                 onToggleTaskCompletion={(taskId, completed) =>
                   handleToggleTaskCompletion(selectedTeam.id, taskId, completed)
                 }
+                handleToggleTaskCompletion={handleToggleTaskCompletion}
               />
             </div>
           </>
