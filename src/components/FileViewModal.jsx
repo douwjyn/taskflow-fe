@@ -40,7 +40,7 @@ export default function FileViewModal({ onClose, submission, taskTitle, task_id,
 
   const handleOpenLink = () => {
     // Open the Google Docs link in a new tab
-    window.open(submission.docLink, "_blank")
+    window.open(submission, "_blank")
   }
 
   return (

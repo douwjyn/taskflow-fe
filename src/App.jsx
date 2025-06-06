@@ -780,7 +780,11 @@ function App() {
     formData.append("task_id", taskId)
     formData.append("team_id", teamId)
     formData.append("user_id", currentUser.id)
-    formData.append("submission", submissionData.file || submissionData.docLink)
+    if (submissionData.file) {
+      formData.append("submission_file", submissionData.file)
+    } else if (submissionData.docLink) {
+      formData.append("submission_link", submissionData.docLink)
+    }
 
     const response = await fetch(`http://localhost:8000/api/upload`, {
       method: "POST",
