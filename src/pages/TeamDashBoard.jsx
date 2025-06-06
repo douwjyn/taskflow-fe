@@ -36,7 +36,7 @@ export default function TeamDashboard({
           title: task.title,
           dueDate: formatDate(task.due_date) || formatDate(team.due_date),
           completed: task.status == "Completed",
-          assignee: (assignee.name ? assignee.name.substring(0, 2).toUpperCase() : "NU"),
+          assignee: assignee.profile_picture,
           assigneeName: assignee.name,
           assigneeId: assignee.id,
           submission: task.submission || null,
@@ -264,9 +264,10 @@ export default function TeamDashboard({
                     <span className={`task-status ${task.completed ? "status-complete" : "status-progress"}`}>
                       {task.completed ? "Complete" : "In Progress"}
                     </span>
-
                     <div className="task-avatar">
-                      <div className="avatar-content">{task.assignee}</div>
+                      <div className="avatar-content">
+                        <img width='50' style={{ objectFit: 'cover' }} src={`http://localhost:8000/storage/${task.assignee}`} alt="" />
+                      </div>
                     </div>
                   </div>
                 </div>

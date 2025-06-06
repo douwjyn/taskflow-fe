@@ -81,11 +81,11 @@ export default function NavBar({
               {currentUser.profilePic ? (
                 <img
                   src={`http://localhost:8000/storage/${currentUser.profilePic}` || "https://placehold.co/80x80"}
-                  alt={currentUser.name}
+                  alt={currentUser.name || currentUser.username}
                   className="avatar-image"
                 />
               ) : (
-                <span>{currentUser.initials || currentUser.name }</span>
+                <span>{currentUser.initials || currentUser.username|| currentUser.name }</span>
               )}
             </div>
             <ChevronDown className="dropdown-icon" />
@@ -95,7 +95,7 @@ export default function NavBar({
             <div className="dropdown-menu">
               <div className="dropdown-header">
                 <div className="dropdown-user-info">
-                  <span className="dropdown-username">{currentUser.name}</span>
+                  <span className="dropdown-username">{currentUser.username || currentUser.name }</span>
                   <span className="dropdown-email">{currentUser.email}</span>
                 </div>
               </div>

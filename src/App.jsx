@@ -959,7 +959,10 @@ function App() {
   const updateUserSettings = async (updatedUser, isDarkMode) => {
     // API call would go here: await updateUserProfile(currentUser.id, updatedUser)
     const formData = new FormData()
+    // console.log(updatedUser)
     formData.append("profile_picture", updatedUser.profilePic)
+    formData.append("name", updatedUser.username)
+    formData.append("email", updatedUser.email)
     const response = await fetch(`http://localhost:8000/api/settings/${currentUser.id}`, {
       method: "POST",
       headers: {
