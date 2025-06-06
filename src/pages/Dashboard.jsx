@@ -249,7 +249,7 @@ export default function Dashboard({
                   {recentUpdates.slice(0, 9).map((update) => (
                     <div className="update-card" key={update.id}>
                       <div className="update-header">
-                        <h3 className="update-team">{update.team}</h3>
+                        <h3 className="update-team">{update.team_name}</h3>
                         <p className="update-chapter">{update.chapter}</p>
                       </div>
                       <div className="progress-container">
@@ -258,11 +258,11 @@ export default function Dashboard({
 
                       {/* Task indicators similar to TaskHub */}
                       <div className="task-indicators">
-                        {update.totalTasks > 0 ? (
-                          Array.from({ length: update.totalTasks }).map((_, index) => (
+                        {update.total_tasks > 0 ? (
+                          Array.from({ length: update.total_tasks }).map((_, index) => (
                             <div
                               key={index}
-                              className={`task-indicator ${index < update.completedTasks ? "Completed" : "in-progress"}`}
+                              className={`task-indicator ${index < update.completed_tasks ? "completed" : "in-progress"}`}
                             ></div>
                           ))
                         ) : (
@@ -271,7 +271,7 @@ export default function Dashboard({
                       </div>
 
                       <div className="task-completion-text">
-                        {update.completedTasks || 0}/{update.totalTasks || 0} tasks complete
+                        {update.completed_tasks || 0}/{update.total_tasks || 0} tasks complete
                       </div>
                     </div>
                   ))}

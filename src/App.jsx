@@ -225,9 +225,7 @@ function App() {
     setNotifications([])
   }
 
-  // BACKEND INTEGRATION: Replace with API call
   const fetchRecentActivities = async () => {
-    // console.log("id:", currentUser.id)
     const user = JSON.parse(localStorage.getItem("user-info"))
     const response = await fetch(`http://localhost:8000/api/user-team-activities/${user.user.id}`)
     const activitiesData = await response.json()
@@ -235,18 +233,30 @@ function App() {
     setRecentActivities(activitiesData.activities)
   }
 
-  // BACKEND INTEGRATION: Replace with API call
-  const fetchRecentUpdates = () => {
-    // API call would go here: const updatesData = await fetchTeamUpdates()
-    setRecentUpdates([])
+  const fetchRecentUpdates = async () => {
+    try {
+      const response = await fetch("http://localhost:8000/api/recent-updates", {
+        method: "GET",
+        headers: {
+          "Accept": "application/json"
+        }
+      });
 
-  }
+      if (!response.ok) {
+        throw new Error("Failed to fetch recent updates");
+      }
 
-  // Handle registration
-  // BACKEND INTEGRATION: Replace with actual user registration
+      const updatesData = await response.json();
+      setRecentUpdates(updatesData);
+    } catch (error) {
+      console.error("Error fetching recent updates:", error);
+      setRecentUpdates([]);
+    }
+  };
+
+
   const handleRegister = async (userData) => {
     try {
-      // API call to the Laravel backend
       const response = await fetch("http://localhost:8000/api/register", {
         method: "POST",
         headers: {
@@ -270,7 +280,6 @@ function App() {
       const data = await response.json()
       console.log("Registration successful:", data)
 
-      // Store the token in localStorage
       localStorage.setItem("user-info", JSON.stringify(data))
 
       // Set user data from the response - handle different response structures
@@ -698,6 +707,7 @@ function App() {
     })
     const data = await response.json()
     console.log("Task assigned successfully:", data)
+    updateTeamProgress(data.team_id, data.team_name)
 
     // API call would go here: await assignTask(teamId, taskData)
 
@@ -859,273 +869,280 @@ function App() {
   }
 
 
-// Function to toggle task completion status
-// BACKEND INTEGRATION: Add API call to update task status
-const handleToggleTaskCompletion = async (teamId, taskId, completed) => {
-  // API call would go here: await updateTaskStatus(teamId, taskId, completed)
-  console.log(`Toggling task ${taskId} completion to ${completed} for team ${teamId}`)
+  // Function to toggle task completion status
+  // BACKEND INTEGRATION: Add API call to update task status
+  const handleToggleTaskCompletion = async (teamId, taskId, completed) => {
+    // API call would go here: await updateTaskStatus(teamId, taskId, completed)
+    console.log(`Toggling task ${taskId} completion to ${completed} for team ${teamId}`)
 
-  const response = await fetch(`http://localhost:8000/api/task-update/${taskId}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-    body: JSON.stringify({
-      // team_id: teamId,
-      task: taskId,
-      // completed: completed,
-    }),
-  })
-  const data = await response.json()
-  console.log("Task status update response:", data)
-  withReactContent(Swal).fire({
-    icon: "success",
-    title: "Task Status Updated",
-    text: `Task has been marked as ${completed ? "complete" : "incomplete"}.`,
-  })
-  // console.log(d)
+    const response = await fetch(`http://localhost:8000/api/task-update/${taskId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        // team_id: teamId,
+        task: taskId,
+        // completed: completed,
+      }),
+    })
+    const data = await response.json()
+    console.log("Task status update response:", data)
+    withReactContent(Swal).fire({
+      icon: "success",
+      title: "Task Status Updated",
+      text: `Task has been marked as ${completed ? "complete" : "incomplete"}.`,
+    })
+    // console.log(d)
 
-  // Update the teams state with the new task status
-  const user = JSON.parse(localStorage.getItem("user-info"))
-  const _response = await fetch(`http://localhost:8000/api/team-list/${user.user.id}`)
-  const teamsData = await _response.json()
-  console.log("Fetched teams:", teamsData.teams)
-  setTeams(teamsData.teams)
+    // Update team progess
+    const progress_response = await fetch(`http://localhost:8000/api/update-progress/${teamId}`)
+    const progress_data = await progress_response.json();
+
+    // Update the teams state with the new task status
+    const user = JSON.parse(localStorage.getItem("user-info"))
+    const _response = await fetch(`http://localhost:8000/api/team-list/${user.user.id}`)
+    const teamsData = await _response.json()
+    setTeams(teamsData.teams)
 
 
-  // Update the selected team if it's the one being modified
-  if (selectedTeam && selectedTeam.id === teamId) {
-    const updatedTeam = teamsData.teams.find((team) => team.id === teamId)
-    if (updatedTeam) {
-      setSelectedTeam(updatedTeam)
+    // Update the selected team if it's the one being modified
+    if (selectedTeam && selectedTeam.id === teamId) {
+      const updatedTeam = teamsData.teams.find((team) => team.id === teamId)
+      if (updatedTeam) {
+        console.log("updated team", updatedTeam)
+        updateTeamProgress(updatedTeam.id, updatedTeam.name)
+        setSelectedTeam(updatedTeam)
+      }
+    }
+
+    // Update the team progress in recent updates
+    // const team = updatedTeam.find((t) => t.id === teamId)
+    // Ensure we update the team progress in recent updates
+    // updateTeamProgress(updatedTeamteamId, team.name)
+
+    // Add an activity for task status change
+    // const task = team.tasks.find((t) => t.id === taskId)
+    // if (task) {
+    //   const newActivity = {
+    //     id: Date.now().toString(),
+    //     team: team.name,
+    //     chapter: task.title,
+    //     message: `Task marked as ${completed ? "complete" : "incomplete"}`,
+    //     timeAgo: "Just now",
+    //   }
+    //   setRecentActivities([newActivity, ...recentActivities.slice(0, 3)])
+    // }
+
+  }
+
+  // Function to update team progress in recent updates
+  const updateTeamProgress = async (teamId, teamName) => {
+    try {
+      const res = await fetch(`http://localhost:8000/api/update-progress/${teamId}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      })
+
+      if (!res.ok) throw new Error("Failed to update");
+
+      const data = await res.json()
+      fetchRecentUpdates()
+     
+
+    } catch (error) {
+      console.error("Failed to update team progress:", error)
     }
   }
 
-  // Update the team progress in recent updates
-  // const team = updatedTeams.find((t) => t.id === teamId)
-  // if (team) {
-  //   // Ensure we update the team progress in recent updates
-  //   updateTeamProgress(teamId, team.name)
+  // const updateTeamProgress = (teamId, teamName) => {
+  //   const team = teams.find((t) => t.id === teamId)
+  //   if (!team) return
 
-  //   // Add an activity for task status change
-  //   const task = team.tasks.find((t) => t.id === taskId)
-  //   if (task) {
-  //     const newActivity = {
-  //       id: Date.now().toString(),
-  //       team: team.name,
-  //       chapter: task.title,
-  //       message: `Task marked as ${completed ? "complete" : "incomplete"}`,
-  //       timeAgo: "Just now",
+  //   // Calculate completed and total tasks
+  //   const completedTasks = team.tasks.filter((task) => task.status == "Completed").length
+  //   const totalTasks = team.tasks.length
+
+
+  //   // Find if this team already has an update
+  //   const existingUpdateIndex = recentUpdates.findIndex((update) => update.team === teamName)
+  //   console.log("team", team)
+  //   if (existingUpdateIndex !== -1) {
+  //     // Update existing entry
+  //     const updatedRecentUpdates = [...recentUpdates]
+  //     updatedRecentUpdates[existingUpdateIndex] = {
+  //       ...updatedRecentUpdates[existingUpdateIndex],
+  //       progress: team.progress,
+  //       completedTasks: completedTasks,
+  //       totalTasks: totalTasks,
   //     }
-  //     setRecentActivities([newActivity, ...recentActivities.slice(0, 3)])
+  //     setRecentUpdates(updatedRecentUpdates)
+  //   } else {
+  //     // Add new entry and limit to 9 items
+  //     const newUpdate = {
+  //       id: Date.now().toString(),
+  //       team: teamName,
+  //       chapter: "Overall Progress",
+  //       progress: team.progress,
+  //       completedTasks: completedTasks,
+  //       totalTasks: totalTasks,
+  //     }
+  //     setRecentUpdates([newUpdate, ...recentUpdates.slice(0, 8)])
   //   }
   // }
 
-}
+  // Function to update user settings
+  const updateUserSettings = async (updatedUser, isDarkMode) => {
+    const formData = new FormData()
+    formData.append("profile_picture", updatedUser.profilePic)
+    formData.append("name", updatedUser.username)
+    formData.append("email", updatedUser.email)
+    const response = await fetch(`http://localhost:8000/api/settings/${currentUser.id}`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+      },
+      body: formData
+    })
 
-// Function to update team progress in recent updates
-const updateTeamProgress = (teamId, teamName) => {
-  const team = teams.find((t) => t.id === teamId)
-  if (!team) return
+    const user_response = await fetch(`http://localhost:8000/api/user/${currentUser.id}`)
+    const updatedUserData = await user_response.json()
+    const userInfo = JSON.parse(localStorage.getItem("user-info") || "{}")
 
-  // Calculate completed and total tasks
-  const completedTasks = team.tasks.filter((task) => task.completed).length
-  const totalTasks = team.tasks.length
-
-  // Find if this team already has an update
-  const existingUpdateIndex = recentUpdates.findIndex((update) => update.team === teamName)
-
-  if (existingUpdateIndex !== -1) {
-    // Update existing entry
-    const updatedRecentUpdates = [...recentUpdates]
-    updatedRecentUpdates[existingUpdateIndex] = {
-      ...updatedRecentUpdates[existingUpdateIndex],
-      progress: team.progress,
-      completedTasks: completedTasks,
-      totalTasks: totalTasks,
+    // Merge the updated user fields
+    const updatedUserInfo = {
+      ...userInfo,
+      user: {
+        ...updatedUserData,
+      },
     }
-    setRecentUpdates(updatedRecentUpdates)
-  } else {
-    // Add new entry and limit to 9 items
-    const newUpdate = {
-      id: Date.now().toString(),
-      team: teamName,
-      chapter: "Overall Progress",
-      progress: team.progress,
-      completedTasks: completedTasks,
-      totalTasks: totalTasks,
+
+    localStorage.setItem("user-info", JSON.stringify(updatedUserInfo))
+    const user = {
+      username: updatedUserData.name || "User",
+      email: updatedUserData.email || "",
+      profilePic: updatedUserData.profile_picture || "",
+      initials:
+        (updatedUserData.name
+          ? updatedUserData.name.substring(0, 2).toUpperCase()
+          : "NU"),
     }
-    setRecentUpdates([newUpdate, ...recentUpdates.slice(0, 8)])
-  }
-}
 
-// Function to update user settings
-// BACKEND INTEGRATION: Add API call to update user settings
-const updateUserSettings = async (updatedUser, isDarkMode) => {
-  // API call would go here: await updateUserProfile(currentUser.id, updatedUser)
-  const formData = new FormData()
-  // console.log(updatedUser)
-  formData.append("profile_picture", updatedUser.profilePic)
-  formData.append("name", updatedUser.username)
-  formData.append("email", updatedUser.email)
-  const response = await fetch(`http://localhost:8000/api/settings/${currentUser.id}`, {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-    },
-    body: formData
-  })
-
-  const user_response = await fetch(`http://localhost:8000/api/user/${currentUser.id}`)
-  const updatedUserData = await user_response.json()
-
-  // const user = {
-  //   name: updatedUserData.name,
-  //   email: updatedUserData.email,
-  //   profilePic: updatedUserData.profile_picture || "",
-  //   initials: updatedUserData.name
-  //     ? updatedUserData.name.substring(0, 2).toUpperCase()
-  //     : "NU",
-  // }
-  const userInfo = JSON.parse(localStorage.getItem("user-info") || "{}")
-
-  // Merge the updated user fields
-  const updatedUserInfo = {
-    ...userInfo,
-    user: {
-      ...updatedUserData, // your new user data from backend
-    },
+    setCurrentUser({ ...currentUser, ...user })
+    setDarkMode(isDarkMode)
   }
 
-  localStorage.setItem("user-info", JSON.stringify(updatedUserInfo))
-  const user = {
-    username: updatedUserData.name || "User",
-    email: updatedUserData.email || "",
-    profilePic: updatedUserData.profile_picture || "",
-    initials:
-      (updatedUserData.name
-        ? updatedUserData.name.substring(0, 2).toUpperCase()
-        : "NU"),
+  const getUserTeams = () => {
+    return teams.filter((team) => team.members.some((member) => member.id === currentUser.id))
   }
 
-  setCurrentUser({ ...currentUser, ...user })
-  setDarkMode(isDarkMode)
-}
-
-// Get user's teams
-const getUserTeams = () => {
-  // return teams 
-  return teams.filter((team) => team.members.some((member) => member.id === currentUser.id))
-}
-
-// Render the appropriate view
-const renderView = () => {
-  switch (currentView) {
-    case "login":
-      return <Login onLogin={handleLogin} onRegisterClick={() => setCurrentView("register")} />
-    case "register":
-      return <Register onRegister={handleRegister} onLoginClick={() => setCurrentView("login")} />
-    case "dashboard":
-      return (
-        <Dashboard
-          onGoToTeams={handleGoToTeams}
-          notifications={notifications}
-          onRemoveNotification={removeNotification}
-          recentActivities={recentActivities}
-          recentUpdates={recentUpdates}
-          currentUser={currentUser}
-          onNavigate={handleNavigate}
-          darkMode={darkMode}
-          toggleDarkMode={toggleDarkMode}
-          updateUserSettings={updateUserSettings}
-          userTeams={getUserTeams()}
-          onManageTeam={handleManageTeam}
-          teams={teams}
-          formatDate={formatDate}
-          timeAgo={timeAgo}
-        />
-      )
-    case "teamSelection":
-      return (
-        <>
-          <NavBar
-            currentUser={currentUser}
-            currentPage="teamSelection"
-            onNavigate={handleNavigate}
+  const renderView = () => {
+    switch (currentView) {
+      case "login":
+        return <Login onLogin={handleLogin} onRegisterClick={() => setCurrentView("register")} />
+      case "register":
+        return <Register onRegister={handleRegister} onLoginClick={() => setCurrentView("login")} />
+      case "dashboard":
+        return (
+          <Dashboard
+            onGoToTeams={handleGoToTeams}
             notifications={notifications}
             onRemoveNotification={removeNotification}
+            recentActivities={recentActivities}
+            recentUpdates={recentUpdates}
+            currentUser={currentUser}
+            onNavigate={handleNavigate}
             darkMode={darkMode}
             toggleDarkMode={toggleDarkMode}
             updateUserSettings={updateUserSettings}
+            userTeams={getUserTeams()}
+            onManageTeam={handleManageTeam}
+            teams={teams}
+            formatDate={formatDate}
+            timeAgo={timeAgo}
           />
-
-          <div className="main-content">
-            <TeamSelection
-              teams={teams}
-              onManageTeam={handleManageTeam}
-              onCreateTeam={() => setShowCreateModal(true)}
-              onJoinTeam={() => setShowJoinModal(true)}
-              onDeleteTeam={handleDeleteTeam}
+        )
+      case "teamSelection":
+        return (
+          <>
+            <NavBar
               currentUser={currentUser}
-              formatDate={formatDate}
+              currentPage="teamSelection"
+              onNavigate={handleNavigate}
+              notifications={notifications}
+              onRemoveNotification={removeNotification}
+              darkMode={darkMode}
+              toggleDarkMode={toggleDarkMode}
+              updateUserSettings={updateUserSettings}
             />
-          </div>
-        </>
-      )
-    case "teamDashboard":
-      return (
-        <>
-          <NavBar
-            currentUser={currentUser}
-            currentPage="teamDashboard"
-            onNavigate={handleNavigate}
-            notifications={notifications}
-            onRemoveNotification={removeNotification}
-            darkMode={darkMode}
-            toggleDarkMode={toggleDarkMode}
-            updateUserSettings={updateUserSettings}
-          />
-          <div className="main-content">
-            <TeamDashboard
-              team={selectedTeam}
-              onBackToTeams={handleBackToTeams}
+
+            <div className="main-content">
+              <TeamSelection
+                teams={teams}
+                onManageTeam={handleManageTeam}
+                onCreateTeam={() => setShowCreateModal(true)}
+                onJoinTeam={() => setShowJoinModal(true)}
+                onDeleteTeam={handleDeleteTeam}
+                currentUser={currentUser}
+                formatDate={formatDate}
+              />
+            </div>
+          </>
+        )
+      case "teamDashboard":
+        return (
+          <>
+            <NavBar
               currentUser={currentUser}
-              onAddMember={(memberName) => handleAddMember(selectedTeam.id, memberName)}
-              onAssignTask={(taskData) => handleAssignTask(selectedTeam.id, taskData)}
-              onFileUpload={async (taskId, submissionData) => {
-                let r = await handleFileUpload(selectedTeam.id, taskId, submissionData)
-                if (r === "error") {
-                  return "error"
-                } else {
-                  return "success"
+              currentPage="teamDashboard"
+              onNavigate={handleNavigate}
+              notifications={notifications}
+              onRemoveNotification={removeNotification}
+              darkMode={darkMode}
+              toggleDarkMode={toggleDarkMode}
+              updateUserSettings={updateUserSettings}
+            />
+            <div className="main-content">
+              <TeamDashboard
+                team={selectedTeam}
+                onBackToTeams={handleBackToTeams}
+                currentUser={currentUser}
+                onAddMember={(memberName) => handleAddMember(selectedTeam.id, memberName)}
+                onAssignTask={(taskData) => handleAssignTask(selectedTeam.id, taskData)}
+                onFileUpload={async (taskId, submissionData) => {
+                  let r = await handleFileUpload(selectedTeam.id, taskId, submissionData)
+                  if (r === "error") {
+                    return "error"
+                  } else {
+                    return "success"
+                  }
+                }}
+                formatDate={formatDate}
+                onToggleTaskCompletion={(taskId, completed) =>
+                  handleToggleTaskCompletion(selectedTeam.id, taskId, completed)
                 }
-              }}
-              formatDate={formatDate}
-              onToggleTaskCompletion={(taskId, completed) =>
-                handleToggleTaskCompletion(selectedTeam.id, taskId, completed)
-              }
-              handleToggleTaskCompletion={handleToggleTaskCompletion}
-            />
-          </div>
-        </>
-      )
-    default:
-      return <Login onLogin={handleLogin} onRegisterClick={() => setCurrentView("register")} />
+                handleToggleTaskCompletion={handleToggleTaskCompletion}
+              />
+            </div>
+          </>
+        )
+      default:
+        return <Login onLogin={handleLogin} onRegisterClick={() => setCurrentView("register")} />
+    }
   }
-}
 
-return (
-  <div className={`task-flow ${isAuthenticated && darkMode ? "dark-mode" : ""}`}>
-    {renderView()}
+  return (
+    <div className={`task-flow ${isAuthenticated && darkMode ? "dark-mode" : ""}`}>
+      {renderView()}
 
-    {/* Create Team Modal */}
-    {showCreateModal && <CreateTeamModal onClose={() => setShowCreateModal(false)} onSubmit={handleCreateTeam} />}
+      {/* Create Team Modal */}
+      {showCreateModal && <CreateTeamModal onClose={() => setShowCreateModal(false)} onSubmit={handleCreateTeam} />}
 
-    {/* Join Team Modal */}
-    {showJoinModal && <JoinTeamModal onClose={() => setShowJoinModal(false)} onSubmit={handleJoinTeam} />}
-  </div>
-)
+      {/* Join Team Modal */}
+      {showJoinModal && <JoinTeamModal onClose={() => setShowJoinModal(false)} onSubmit={handleJoinTeam} />}
+    </div>
+  )
 }
 
 export default App
