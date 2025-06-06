@@ -61,22 +61,7 @@ function App() {
   // Get user
   useEffect(() => {
     // Check if user info is stored in localStorage
-    const userInfo = JSON.parse(localStorage.getItem("user-info")) || null
-    if (userInfo && userInfo.user) {
-      const user = {
-        id: userInfo.user.id,
-        username: userInfo.user.name || userInfo.user.name || "User",
-        email: userInfo.user.email || "",
-        initials:
-          (userInfo.user.name
-            ? userInfo.user.name.substring(0, 2).toUpperCase()
-            : userInfo.user.name
-              ? userInfo.user.name.substring(0, 2).toUpperCase()
-              : "NU"),
-      }
 
-      setCurrentUser(user)
-    }
 
   }, [])
 
@@ -85,9 +70,25 @@ function App() {
 
     if (isAuthenticated) {
       fetchInitialData()
+      const userInfo = JSON.parse(localStorage.getItem("user-info")) || null
+      if (userInfo && userInfo.user) {
+        const user = {
+          id: userInfo.user.id,
+          username: userInfo.user.name || userInfo.user.name || "User",
+          email: userInfo.user.email || "",
+          initials:
+            (userInfo.user.name
+              ? userInfo.user.name.substring(0, 2).toUpperCase()
+              : userInfo.user.name
+                ? userInfo.user.name.substring(0, 2).toUpperCase()
+                : "NU"),
+        }
+
+        setCurrentUser(user)
+      }
+
+
       setCurrentView("dashboard")
-      setCurrentUser(JSON.parse(localStorage.getItem("user-info")).user)
-      console.log(teams)
     } else if (isAuthenticated && darkMode) {
       document.body.classList.add("dark-mode")
     } else {
@@ -346,10 +347,17 @@ function App() {
       }
 
 
+
       const data = await response.json()
       console.log("Team created successfully:", data)
 
       fetchUserTeams()
+
+      withReactContent(Swal).fire({
+        icon: "success",
+        title: "Team Created",
+        text: `Successfully created team: ${teamData.name}`,
+      })
 
       // Add the leader to the members array
       // const teamMembers = [
@@ -671,10 +679,10 @@ function App() {
 
   // Function to assign a task to a team member
   // BACKEND INTEGRATION: Add API call to assign task
-  const handleAssignTask = async(teamId, taskData) => {
+  const handleAssignTask = async (teamId, taskData) => {
     console.log(taskData)
     // API call would go here: await assignTask(teamId, taskData)
-      const response = await fetch(`http://localhost:8000/api/task-assign`, {
+    const response = await fetch(`http://localhost:8000/api/task-assign`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -762,12 +770,15 @@ function App() {
 
   // Function to handle file upload for a task
   // BACKEND INTEGRATION: Add API call to upload file
-  const handleFileUpload = async(teamId, taskId, submissionData) => {
+  const handleFileUpload = async (teamId, taskId, submissionData) => {
     // API call would go here: await uploadTaskSubmission(teamId, taskId, submissionData)
     console.log("submission: ", submissionData)
+    console.log("id: ", teamId)
 
     const formData = new FormData()
     formData.append("task_id", taskId)
+    formData.append("team_id", teamId)
+    formData.append("user_id", currentUser.id)
     formData.append("submission", submissionData.file)
 
     const response = await fetch(`http://localhost:8000/api/upload`, {
@@ -779,6 +790,15 @@ function App() {
     })
     const data = await response.json()
     console.log("File upload response:", data)
+
+    if (data.response === "success") {
+      // Show success message
+      withReactContent(Swal).fire({
+        icon: "success",
+        title: "File Uploaded",
+        text: "Your file has been uploaded successfully.",
+      })
+    }
 
     // setTeams(
     //   teams.map((team) => {
@@ -834,7 +854,7 @@ function App() {
 
   // Function to toggle task completion status
   // BACKEND INTEGRATION: Add API call to update task status
-  const handleToggleTaskCompletion = async(teamId, taskId, completed) => {
+  const handleToggleTaskCompletion = async (teamId, taskId, completed) => {
     // API call would go here: await updateTaskStatus(teamId, taskId, completed)
     console.log(`Toggling task ${taskId} completion to ${completed} for team ${teamId}`)
 
@@ -852,32 +872,28 @@ function App() {
     })
     const data = await response.json()
     console.log("Task status update response:", data)
-    const d = await fetchUserTeams()
-    console.log("Updated teams after task completion toggle:", d)
-    setTeams(d)
+    withReactContent(Swal).fire({
+      icon: "success",
+      title: "Task Status Updated",
+      text: `Task has been marked as ${completed ? "complete" : "incomplete"}.`,
+    })  
     // console.log(d)
-    
+
     // Update the teams state with the new task status
-    // const updatedTeams = teams.map((team) => {
+    const user = JSON.parse(localStorage.getItem("user-info"))
+    const _response = await fetch(`http://localhost:8000/api/team-list/${user.user.id}`)
+    const teamsData = await _response.json()
+    console.log("Fetched teams:", teamsData.teams)
+    setTeams(teamsData.teams)
 
-    //     // Calculate new progress
-    //     const completedTasks = updatedTasks.filter((task) => task.completed).length
-    //     const totalTasks = updatedTasks.length
-    //     const newProgress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0
 
-    //     // Return updated team
-    //     return {
-    //       ...team,
-    //       tasks: updatedTasks,
-    //       progress: newProgress,
-    //     }
-    //   }
-    //   return team
-    // })
-
-    // return updatedTeams
-    // Update the teams state
-    // setTeams(updatedTeams)
+  // Update the selected team if it's the one being modified
+  if (selectedTeam && selectedTeam.id === teamId) {
+    const updatedTeam = teamsData.teams.find((team) => team.id === teamId)
+    if (updatedTeam) {
+      setSelectedTeam(updatedTeam)
+    }
+  }
 
     // Update the team progress in recent updates
     // const team = updatedTeams.find((t) => t.id === teamId)
@@ -896,14 +912,6 @@ function App() {
     //       timeAgo: "Just now",
     //     }
     //     setRecentActivities([newActivity, ...recentActivities.slice(0, 3)])
-    //   }
-    // }
-
-    // Update the selected team if it's the one being modified
-    // if (selectedTeam && selectedTeam.id === teamId) {
-    //   const updatedTeam = updatedTeams.find((team) => team.id === teamId)
-    //   if (updatedTeam) {
-    //     setSelectedTeam(updatedTeam)
     //   }
     // }
 
@@ -999,6 +1007,7 @@ function App() {
               toggleDarkMode={toggleDarkMode}
               updateUserSettings={updateUserSettings}
             />
+
             <div className="main-content">
               <TeamSelection
                 teams={teams}

@@ -179,7 +179,7 @@ export default function Dashboard({
           <div className="welcome-section">
             <div className="welcome-header">
               <div>
-                <h1 className="dashboard-title">Welcome back, {currentUser.name}!</h1>
+                <h1 className="dashboard-title">Welcome back, {currentUser.username}!</h1>
                 <p className="dashboard-subtitle">Here's what's happening with your teams</p>
               </div>
               <div className="dashboard-actions">

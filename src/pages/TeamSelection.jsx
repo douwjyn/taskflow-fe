@@ -80,8 +80,8 @@ export default function TeamSelection({ teams, onManageTeam, onCreateTeam, onJoi
                   {team.tasks?.map((task) => (
                     <div
                       key={task.id}
-                      className={`task-indicator ${task.completed ? "completed" : "in-progress"}`}
-                      title={`${task.title}: ${task.completed ? "Complete" : "In Progress"}`}
+                      className={`task-indicator ${task.status == "Completed" ? "completed" : "in-progress"}`}
+                      title={`${task.title}: ${task.status == "Completed" ? "Complete" : "In Progress"}`}
                     ></div>
                   ))}
                 </div>

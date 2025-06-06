@@ -19,6 +19,7 @@ export default function NavBar({
 
   let user= JSON.parse(localStorage.getItem('user-info'))
   console.warn()
+  console.log(currentUser)
 
   // Add styling for notification items
   const toggleNotifications = () => {

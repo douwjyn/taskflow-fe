@@ -17,6 +17,7 @@ export default function TeamDashboard({
   handleToggleTaskCompletion
 }) {
   // State for tasks
+  const [cancelFile, setCancelFile] = useState(false)
   const [tasks, setTasks] = useState([])
 
   // Update tasks when team changes
@@ -45,7 +46,7 @@ export default function TeamDashboard({
 
       setTasks(teamTasks)
     }
-  }, [team])
+  }, [team, cancelFile])
 
   // State for modals
   const [showAssignModal, setShowAssignModal] = useState(false)
@@ -153,14 +154,27 @@ export default function TeamDashboard({
     setShowFileUploadModal(false)
   }
 
-  // Function to handle cancellation of file upload
-  const handleCancelUpload = (taskId) => {
-    if (window.confirm("Are you sure you want to remove your submission? This action cannot be undone.")) {
-      // Update the task to remove the submission
-      const updatedTasks = tasks.map((task) => (task.id === taskId ? { ...task, submission: null } : task))
-      setTasks(updatedTasks)
+  
 
-      // Call the parent component's function to update the task
+  // Function to handle cancellation of file upload
+  const handleCancelUpload = async (taskId) => {
+    if (window.confirm("Are you sure you want to remove your submission? This action cannot be undone.")) {
+      const response = await fetch(`http://localhost:8000/api/upload/${taskId}`, {
+        method: "DELETE",
+      })
+      if (!response.ok) {
+        console.error("Failed to remove submission:", response.statusText)
+        return
+      }
+
+      // Update the local tasks state
+      const updatedTasks = tasks.map((task) =>
+        task.id === taskId ? { ...task, submission: null, submitted_date: null } : task
+      )
+      setTasks(updatedTasks)
+      console.log("updated:", updatedTasks)
+
+      // Call the parent component's function to update the task if needed
       if (onFileUpload) {
         onFileUpload(taskId, null)
       }
