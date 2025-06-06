@@ -284,7 +284,7 @@ export default function TeamDashboard({
             <div className={`member-card ${member.id === currentUser.id ? "current-user-card" : ""}`} key={member.id}>
               <div className="member-avatar">
                 <div className="avatar-content">
-                  <img src={`http:localhost:8000/storage/${member.profile_picture}`} alt="" />
+                  <img style={{objectFit: 'cover' }} width='50' src={`http://localhost:8000/storage/${member.profile_picture}`} alt="avatar" />
                 </div>
               </div>
               <div className="member-info">
