@@ -24,6 +24,7 @@ export default function TasksModal({ title, items, onClose, formatDate }) {
                 <div className="task-info">
                   <h4 className="task-title">{item.title}</h4>
                   {item.team && <p className="task-team">Team: {item.team}</p>}
+                  {item.name && <p className="task-team">Team: {item.name}</p>}
                   {item.dueDate && <p className="task-date">Due: {formatDate(item.dueDate)}</p>}
                   {item.assignee && <p className="task-assignee">Assigned to: {item.assignee}</p>}
                 </div>

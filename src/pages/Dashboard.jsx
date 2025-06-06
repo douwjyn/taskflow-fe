@@ -26,6 +26,7 @@ export default function Dashboard({
   const [modalContent, setModalContent] = useState(null)
   const [completedTasksCount, setCompletedTasksCount] = useState(0)
   const [pendingTasksCount, setPendingTasksCount] = useState(0)
+  const [activeTeamsCount, setActiveTeamsCount] = useState(0)
   const [upcomingDeadlinesCount, setUpcomingDeadlinesCount] = useState(0)
 
   const getAllTasks = async () => {
@@ -54,7 +55,7 @@ export default function Dashboard({
         id: task.id,
         title: task.title,
         team: team ? team.name : "Unknown Team",
-        dueDate: task.due_date || (team ? team.due_date : null),
+        due_date: task.due_date || (team ? team.due_date : null),
         assignee: assignee ? assignee.name : "Unassigned",
         status: task.status || (task.completed ? "completed" : "pending"),
       }
@@ -70,7 +71,8 @@ export default function Dashboard({
       .map((team) => ({
         title: team.name,
         team: `Leader: ${team.leader.name}`,
-        dueDate: team.dueDate,
+        due_date
+        : team.due_date,
       }))
 
     console.log("userTeamsList", teams)
@@ -96,7 +98,7 @@ export default function Dashboard({
   }
 
   const handlePendingTasksClick = async () => {
-    const pendingTasks = (await getAllTasks()).filter((task) => task.status === "pending")
+    const pendingTasks = (await getAllTasks()).filter((task) => task.status === "Pending")
     setModalContent({
       title: "Pending Tasks",
       items: pendingTasks,
@@ -105,14 +107,16 @@ export default function Dashboard({
 
   const handleUpcomingDeadlinesClick = async () => {
     // Get all tasks with due dates
-    const tasksWithDeadlines = (await getAllTasks()).filter((task) => task.dueDate)
+    const tasksWithDeadlines = (await getAllTasks()).filter((task) => task.due_date)
 
     // Sort by due date (assuming due dates are in a format that can be compared)
     const sortedTasks = tasksWithDeadlines.sort((a, b) => {
-      const dateA = new Date(a.dueDate)
-      const dateB = new Date(b.dueDate)
+      const dateA = new Date(a.due_date)
+      const dateB = new Date(b.due_date)
       return dateA - dateB
     })
+
+    console.log(sortedTasks)
 
     setModalContent({
       title: "Upcoming Deadlines",
@@ -126,14 +130,13 @@ export default function Dashboard({
 
   // Get counts for stat cards
   const userTeamsCount = teams.filter((team) => team.members.some((member) => member.id === currentUser.id)).length
-
   // const allTasks = await getAllTasks()
   // (async () => {
   //   const tasks = await getAllTasks()
   //   if (tasks) {
   //     const completedTasksCount = tasks.filter((task) => task.status === "completed").length
   //     const pendingTasksCount = tasks.filter((task) => task.status === "pending").length
-  //     const upcomingDeadlinesCount = tasks.filter((task) => task.dueDate).length
+  //     const upcomingDeadlinesCount = tasks.filter((task) => task.due_date).length
 
   //     // Update state or variables with these counts if needed
   //     return {
@@ -154,6 +157,7 @@ export default function Dashboard({
       })
       const data = await response.json()
       const tasks = data.tasks || []
+      setActiveTeamsCount(teams.filter((team) => team.members.some((member) => member.id === currentUser.id)).length)
       setCompletedTasksCount(tasks.filter((task) => task.status === "Completed").length)
       setPendingTasksCount(tasks.filter((task) => task.status === "Pending").length)
       setUpcomingDeadlinesCount(tasks.filter((task) => task.due_date).length)
