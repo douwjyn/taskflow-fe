@@ -13,6 +13,7 @@ export default function SettingsModal({ currentUser, onClose, darkMode: initialD
 
   const handleProfilePicChange = (e) => {
     const file = e.target.files[0]
+    setProfilePic(file)
     if (file) {
       // In a real app, you would upload this file to a server
       // For now, we'll just create a local URL for preview
@@ -26,12 +27,11 @@ export default function SettingsModal({ currentUser, onClose, darkMode: initialD
 
   const handleSubmit = (e) => {
     e.preventDefault()
-
     // Create updated user object
     const updatedUser = {
       email,
       username,
-      profilePic: previewPic,
+      profilePic: profilePic,
     }
 
     // Call the updateUserSettings function from props
@@ -62,7 +62,7 @@ export default function SettingsModal({ currentUser, onClose, darkMode: initialD
           <div className="profile-pic-section">
             <div className="profile-pic-container">
               {previewPic ? (
-                <img src={previewPic || "/placeholder.svg"} alt="Profile" className="profile-pic-preview" />
+                <img src={previewPic || "/placeholder.svg"} alt="  " className="profile-pic-preview" />
               ) : (
                 <div className="profile-pic-placeholder">{currentUser.initials}</div>
               )}

@@ -66,7 +66,7 @@ export default function TeamDashboard({
   const isTeamLeader = team && team.leader.id === currentUser.id
 
   // Function to toggle task completion status
-  const toggleTaskCompletion = async(taskId) => {
+  const toggleTaskCompletion = async (taskId) => {
     const teamId = team.id
     handleToggleTaskCompletion(teamId, taskId, !tasks.find((task) => task.id === taskId).completed)
     // In a real app, you would also update this in the parent component/database
@@ -154,7 +154,7 @@ export default function TeamDashboard({
     setShowFileUploadModal(false)
   }
 
-  
+
 
   // Function to handle cancellation of file upload
   const handleCancelUpload = async (taskId) => {
@@ -283,7 +283,9 @@ export default function TeamDashboard({
           {team.members.map((member) => (
             <div className={`member-card ${member.id === currentUser.id ? "current-user-card" : ""}`} key={member.id}>
               <div className="member-avatar">
-                <div className="avatar-content">{member.initials}</div>
+                <div className="avatar-content">
+                  <img src={`http:localhost:8000/storage/${member.profile_picture}`} alt="" />
+                </div>
               </div>
               <div className="member-info">
                 <h4 className="member-name">

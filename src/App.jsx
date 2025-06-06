@@ -76,6 +76,7 @@ function App() {
           id: userInfo.user.id,
           username: userInfo.user.name || userInfo.user.name || "User",
           email: userInfo.user.email || "",
+          profilePic: userInfo.user.profile_picture || "",
           initials:
             (userInfo.user.name
               ? userInfo.user.name.substring(0, 2).toUpperCase()
@@ -149,11 +150,11 @@ function App() {
         // If no user data is found, use the data object itself
         // userData = data
       }
-
       const user = {
         id: userData.id || "user1",
         username: userData.name || userData.name || "User",
         email: userData.email || "",
+        profilePic: userData.profile_picture || "",
         initials:
           (userData.name
             ? userData.name.substring(0, 2).toUpperCase()
@@ -876,7 +877,7 @@ function App() {
       icon: "success",
       title: "Task Status Updated",
       text: `Task has been marked as ${completed ? "complete" : "incomplete"}.`,
-    })  
+    })
     // console.log(d)
 
     // Update the teams state with the new task status
@@ -887,13 +888,13 @@ function App() {
     setTeams(teamsData.teams)
 
 
-  // Update the selected team if it's the one being modified
-  if (selectedTeam && selectedTeam.id === teamId) {
-    const updatedTeam = teamsData.teams.find((team) => team.id === teamId)
-    if (updatedTeam) {
-      setSelectedTeam(updatedTeam)
+    // Update the selected team if it's the one being modified
+    if (selectedTeam && selectedTeam.id === teamId) {
+      const updatedTeam = teamsData.teams.find((team) => team.id === teamId)
+      if (updatedTeam) {
+        setSelectedTeam(updatedTeam)
+      }
     }
-  }
 
     // Update the team progress in recent updates
     // const team = updatedTeams.find((t) => t.id === teamId)
@@ -955,9 +956,51 @@ function App() {
 
   // Function to update user settings
   // BACKEND INTEGRATION: Add API call to update user settings
-  const updateUserSettings = (updatedUser, isDarkMode) => {
+  const updateUserSettings = async (updatedUser, isDarkMode) => {
     // API call would go here: await updateUserProfile(currentUser.id, updatedUser)
-    setCurrentUser({ ...currentUser, ...updatedUser })
+    const formData = new FormData()
+    formData.append("profile_picture", updatedUser.profilePic)
+    const response = await fetch(`http://localhost:8000/api/settings/${currentUser.id}`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+      },
+      body: formData
+    })
+
+    const user_response = await fetch(`http://localhost:8000/api/user/${currentUser.id}`)
+    const updatedUserData = await user_response.json()
+
+    // const user = {
+    //   name: updatedUserData.name,
+    //   email: updatedUserData.email,
+    //   profilePic: updatedUserData.profile_picture || "",
+    //   initials: updatedUserData.name
+    //     ? updatedUserData.name.substring(0, 2).toUpperCase()
+    //     : "NU",
+    // }
+    const userInfo = JSON.parse(localStorage.getItem("user-info") || "{}")
+
+    // Merge the updated user fields
+    const updatedUserInfo = {
+      ...userInfo,
+      user: {
+        ...updatedUserData, // your new user data from backend
+      },
+    }
+
+    localStorage.setItem("user-info", JSON.stringify(updatedUserInfo))
+    const user = {
+      username: updatedUserData.name || "User",
+      email: updatedUserData.email || "",
+      profilePic: updatedUserData.profile_picture || "",
+      initials:
+        (updatedUserData.name
+          ? updatedUserData.name.substring(0, 2).toUpperCase()
+          : "NU"),
+    }
+
+    setCurrentUser({ ...currentUser, ...user })
     setDarkMode(isDarkMode)
   }
 

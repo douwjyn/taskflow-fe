@@ -80,7 +80,7 @@ export default function NavBar({
             <div className="user-avatar">
               {currentUser.profilePic ? (
                 <img
-                  src={currentUser.profilePic || "/placeholder.svg"}
+                  src={`http://localhost:8000/storage/${currentUser.profilePic}` || "https://placehold.co/80x80"}
                   alt={currentUser.name}
                   className="avatar-image"
                 />
