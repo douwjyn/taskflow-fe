@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
 /* Base styles */
 * {
   box-sizing: border-box;
@@ -92,16 +93,21 @@ body {
 }
 
 .logo-text {
-  font-size: 1.5rem;
-  font-weight: 500;
-  color: #3a6ea5;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #2f5885;
 }
 
 .auth-form-title {
   font-size: 1.5rem;
   font-weight: 600;
-  margin-bottom: 2rem;
   color: #1a202c;
+}
+.auth-form-description {
+  font-size: 14px;
+  color: gray;
+  font-weight: normal;
+  margin-bottom: 2rem;
 }
 
 .auth-form {
@@ -302,6 +308,7 @@ body {
   border: none;
   cursor: pointer;
   padding: 0;
+  /* font-family: 'Raleway'; */
 }
 
 .nav-link:hover {
@@ -449,7 +456,7 @@ body {
 .section-title {
   font-size: 1.25rem;
   font-weight: 600;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
   color: #1a202c;
   text-align: left;
 }
@@ -537,6 +544,8 @@ body {
 
 .activity-content {
   flex: 1;
+  display: flex;
+  justify-content: space-between;
 }
 
 .activity-team {
@@ -899,7 +908,7 @@ body {
 }
 
 .task-title {
-  font-weight: 600;
+  font-weight: 800;
   margin: 0 0 4px 0;
 }
 
@@ -2417,6 +2426,7 @@ h2 {
   flex: 1;
   overflow: auto;
   max-height: 400px;
+  margin-top: 1rem;
 }
 
 .mt-4 {

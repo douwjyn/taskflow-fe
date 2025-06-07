@@ -44,11 +44,12 @@ export default function Login({ onLogin, onRegisterClick }) {
         <div className="auth-form-container">
           <div className="auth-logo">
             <img src="/images/taskflow-logo.png" alt="TaskFlow Logo" className="logo-image" />
-            <div className="logo-text">TaskFlow</div>
+            <div className="logo-text"><i>TaskFLow</i></div>
           </div>
 
-          <h2 className="auth-form-title">Sign in to TaskFlow</h2>
-
+          <h2 className="auth-form-title">Sign in to TaskFlow <br/>
+            <span className='auth-form-description'>Welcome back! please enter your credentials.</span>
+          </h2>
           <form onSubmit={handleSubmit} className="auth-form">
             <div className="form-group">
               <label htmlFor="username">Username</label>

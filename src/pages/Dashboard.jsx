@@ -28,7 +28,7 @@ export default function Dashboard({
   const [pendingTasksCount, setPendingTasksCount] = useState(0)
   const [activeTeamsCount, setActiveTeamsCount] = useState(0)
   const [upcomingDeadlinesCount, setUpcomingDeadlinesCount] = useState(0)
-
+  const [allTasks, setAllTasks] = useState([]);
   const getAllTasks = async () => {
     const response = await fetch(`http://localhost:8000/api/tasks/${currentUser.id}`, {
       headers: {
@@ -46,7 +46,7 @@ export default function Dashboard({
       })
     })
 
-    const allTasks = (tasks || []).map(task => {
+    const _allTasks = (tasks || []).map(task => {
       const team = teamByTaskId[task.id]
       // If task.users is an array, take the first user as assignee
       const assignee = Array.isArray(task.users) && task.users.length > 0 ? task.users[0] : null
@@ -57,13 +57,11 @@ export default function Dashboard({
         team: team ? team.name : "Unknown Team",
         due_date: task.due_date || (team ? team.due_date : null),
         assignee: assignee ? assignee.name : "Unassigned",
-        status: task.status || (task.completed ? "completed" : "pending"),
+        status: task.status
       }
     })
-
-    return allTasks
+    return _allTasks
   }
-
   // Handle stat card clicks
   const handleActiveTeamsClick = () => {
     const userTeamsList = teams
@@ -72,7 +70,7 @@ export default function Dashboard({
         title: team.name,
         team: `Leader: ${team.leader.name}`,
         due_date
-        : team.due_date,
+          : team.due_date,
       }))
 
     console.log("userTeamsList", teams)
@@ -84,25 +82,28 @@ export default function Dashboard({
   }
 
   const handleCompletedTasksClick = async () => {
-    let tasks = await getAllTasks()
+    const response = await fetch(`http://localhost:8000/api/tasks/complete/${currentUser.id}`, {
+      headers: { "Content-Type": "application/json" }
+    });
 
-    if (tasks) {
-      const completedTasks = tasks.filter((task) => task.status === "Completed")
-      console.log("completedTasks", completedTasks)
-      setModalContent({
-        title: "Completed Tasks",
-        items: completedTasks,
-      })
-    }
+    const completedTasks = await response.json();
+    setModalContent({
+      title: "Completed Tasks",
+      items: completedTasks.completed_tasks,
+    });
 
   }
 
   const handlePendingTasksClick = async () => {
-    const pendingTasks = (await getAllTasks()).filter((task) => task.status === "Pending")
+    const response = await fetch(`http://localhost:8000/api/tasks/pending/${currentUser.id}`, {
+      headers: { "Content-Type": "application/json" }
+    });
+
+    const pendingTasks = await response.json();
     setModalContent({
       title: "Pending Tasks",
-      items: pendingTasks,
-    })
+      items: pendingTasks.pending_tasks,
+    });
   }
 
   const handleUpcomingDeadlinesClick = async () => {
@@ -130,24 +131,7 @@ export default function Dashboard({
 
   // Get counts for stat cards
   const userTeamsCount = teams.filter((team) => team.members.some((member) => member.id === currentUser.id)).length
-  // const allTasks = await getAllTasks()
-  // (async () => {
-  //   const tasks = await getAllTasks()
-  //   if (tasks) {
-  //     const completedTasksCount = tasks.filter((task) => task.status === "completed").length
-  //     const pendingTasksCount = tasks.filter((task) => task.status === "pending").length
-  //     const upcomingDeadlinesCount = tasks.filter((task) => task.due_date).length
-
-  //     // Update state or variables with these counts if needed
-  //     return {
-  //       completedTasksCount,
-  //       pendingTasksCount,
-  //       upcomingDeadlinesCount,
-  //     }
-  //   }
-  // })()
-
-  useEffect(() => {
+ useEffect(() => {
     const fetchTaskCounts = async () => {
       if (!currentUser.id) return
       const response = await fetch(`http://localhost:8000/api/tasks/${currentUser.id}`, {
@@ -289,10 +273,12 @@ export default function Dashboard({
                   {recentActivities.slice(0, 4).map((activity) => (
                     <div className="activity-item" key={activity.id}>
                       <div className="activity-content">
-                        <div className="activity-team">{activity.subject?.name || ''}</div>
-                        <div className="activity-details">
-                          {/* {activity.chapter && <span className="activity-chapter">{activity.chapter || 'Chapter: '}</span>} */}
-                          {activity.description && <span className="activity-message">{activity.description}</span>}
+                        <div>
+                          <div className="activity-team">{activity.subject?.name || ''}</div>
+                          <div className="activity-details">
+                            {/* {activity.chapter && <span className="activity-chapter">{activity.chapter || 'Chapter: '}</span>} */}
+                            {activity.description && <span className="activity-message">{activity.description}.</span>}
+                          </div>
                         </div>
                         <div className="activity-time">{timeAgo(activity.created_at)}</div>
                       </div>
@@ -306,7 +292,7 @@ export default function Dashboard({
       </main>
 
       {/* Modal for displaying tasks or teams */}
-      {modalContent && <TasksModal title={modalContent.title} items={modalContent.items} onClose={closeModal} formatDate={formatDate}/>}
+      {modalContent && <TasksModal title={modalContent.title} items={modalContent.items} onClose={closeModal} formatDate={formatDate} />}
     </div>
   )
 }
