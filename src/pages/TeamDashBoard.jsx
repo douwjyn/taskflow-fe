@@ -70,7 +70,7 @@ export default function TeamDashboard({
   const [newMemberName, setNewMemberName] = useState("")
 
   // Check if current user is the team leader
-  const isTeamLeader = team && team.leader.id === currentUser.id
+  const isTeamLeader = team && team.leader.id  === currentUser.id 
 
   // Function to toggle task completion status
   const toggleTaskCompletion = async (taskId) => {
@@ -201,7 +201,9 @@ export default function TeamDashboard({
   if (!team) {
     return <div>No team selected</div>
   }
-
+  useEffect(() => {
+    console.log("dashdhahdh", team)
+  }, [team])
   return (
     <div className="team-dashboard">
       <div className="dashboard-header">
@@ -212,7 +214,6 @@ export default function TeamDashboard({
       </div>
 
       <h2 className="team-title">{team.name}</h2>
-
       {/* Current Tasks Section */}
       <div className="tasks-section">
         <div className="section-header">

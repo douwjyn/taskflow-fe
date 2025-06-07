@@ -90,7 +90,7 @@ function App() {
 
   // Function to remove a notification
   // BACKEND INTEGRATION: Add API call to delete notification
-  const removeNotification = async(notificationId) => {
+  const removeNotification = async (notificationId) => {
     // API call would go here: deleteNotification(notificationId)
     const response = await fetch(`http://localhost:8000/api/delete-notification/${notificationId}`)
     fetchNotifications()
@@ -470,7 +470,7 @@ function App() {
       // const newActivity = data.activity
       // setRecentActivities(newActivity)
 
-     
+
 
       // if (teamToJoin) {
       //   // Check if user is already a member
@@ -555,65 +555,108 @@ function App() {
 
   // Function to add a member to a team
   // BACKEND INTEGRATION: Add API call to add team member
-  const handleAddMember = (teamId, memberName) => {
-    // API call would go here: await addTeamMember(teamId, memberName)
+  const handleAddMember = async (teamId, memberName) => {
+    try {
 
-    setTeams(
-      teams.map((team) => {
-        if (team.id === teamId) {
-          // Create a new member object
-          const nameParts = memberName.split(" ")
-          const initials = nameParts
-            .map((part) => part[0])
-            .join("")
-            .toUpperCase()
-          const newMember = {
-            id: `member-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-            name: memberName,
-            initials: initials,
-            task: "Not assigned",
-            isLeader: false,
-          }
 
-          // Return updated team with new member
-          return {
-            ...team,
-            members: [...team.members, newMember],
-          }
-        }
-        return team
-      }),
-    )
+      // API call would go here: await addTeamMember(teamId, memberName)
+      console.log('kyuni', memberName);
+      const response = await fetch(`http://localhost:8000/api/add-member/${teamId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          accept: 'application/json'
+        },
+        body: JSON.stringify({
+          member_name: memberName
+        })
+      })
 
-    // Add a notification for the new member
-    const team = teams.find((t) => t.id === teamId)
-    if (team) {
-      const newNotification = {
-        id: Date.now().toString(),
-        type: "invite",
-        team: team.name,
-        message: `${memberName} has been invited to the team`,
-        timeAgo: "Just now",
+      const data = await response.json()
+      // console.log(data)
+
+      if (data.errors) {
+        throw new Error(data.message)
       }
-      setNotifications([newNotification, ...notifications])
 
-      // Add an activity for adding a member
-      const newActivity = {
-        id: (Date.now() + 1).toString(),
-        team: team.name,
-        message: `${memberName} was invited to the team`,
-        timeAgo: "Just now",
-      }
-      setRecentActivities([newActivity, ...recentActivities])
+      fetchNotifications()
+
+      withReactContent(Swal).fire({
+        icon: "success",
+        title: "Member added",
+        text: data.message,
+      })
+
+      // setTeams(
+      //   teams.map((team) => {
+      //     if (team.id === teamId) {
+      //       // Create a new member object
+      //       const nameParts = memberName.split(" ")
+      //       const initials = nameParts
+      //         .map((part) => part[0])
+      //         .join("")
+      //         .toUpperCase()
+      //       const newMember = {
+      //         id: `member-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      //         name: memberName,
+      //         initials: initials,
+      //         task: "Not assigned",
+      //         isLeader: false,
+      //       }
+
+      //       // Return updated team with new member
+      //       return {
+      //         ...team,
+      //         members: [...team.members, newMember],
+      //       }
+      //     }
+      //     return team
+      //   }),
+      // )
+
+      // Add a notification for the new member
+
+      // const team = data.team
+      console.log("team::", data.team)
+      setSelectedTeam(data.team)
+
+      // if (team) {
+      //   const newNotification = {
+      //     id: Date.now().toString(),
+      //     type: "invite",
+      //     team: team.name,
+      //     message: `${memberName} has been invited to the team`,
+      //     timeAgo: "Just now",
+      //   }
+      //   setNotifications([newNotification, ...notifications])
+
+      //   // Add an activity for adding a member
+      //   const newActivity = {
+      //     id: (Date.now() + 1).toString(),
+      //     team: team.name,
+      //     message: `${memberName} was invited to the team`,
+      //     timeAgo: "Just now",
+      //   }
+      //   setRecentActivities([newActivity, ...recentActivities])
+      // }
+
+      // Update the selected team if it's the one being modified
+      // console.log("selected:::", selectedTeam)
+      // if (selectedTeam && selectedTeam.id === teamId) {
+      //   const updatedTeam = teams.find((team) => data.id === teamId)
+      //   if (updatedTeam) {
+      //     setSelectedTeam(updatedTeam)
+      //   }
+      // }
+    } catch (err) {
+
+      withReactContent(Swal).fire({
+        icon: "error",
+        title: "Adding failed",
+        text: err.message || err || "Something went wrong",
+      })
     }
 
-    // Update the selected team if it's the one being modified
-    if (selectedTeam && selectedTeam.id === teamId) {
-      const updatedTeam = teams.find((team) => team.id === teamId)
-      if (updatedTeam) {
-        setSelectedTeam(updatedTeam)
-      }
-    }
   }
 
   // Function to assign a task to a team member
@@ -931,7 +974,7 @@ function App() {
       body: formData
     })
 
-    
+
 
     const user_response = await fetch(`http://localhost:8000/api/user/${currentUser.id}`)
     const updatedUserData = await user_response.json()
