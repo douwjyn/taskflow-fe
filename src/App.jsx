@@ -687,7 +687,16 @@ function App() {
 
       const data = await response.json()
       console.log("Task assigned successfully:", data)
+      withReactContent(Swal).fire({
+        icon: 'success',
+        title: 'Assigned', 
+        text: 'User has been assigned'
+      })
+      
       updateTeamProgress(data.team_id, data.team_name)
+      setSelectedTeam(data.team)
+      console.log("hurts like hell", data.team)
+
     } catch (err) {
       console.log(err)
     }

@@ -23,7 +23,6 @@ export default function TeamDashboard({
   // State for tasks
   const [cancelFile, setCancelFile] = useState(false)
   const [tasks, setTasks] = useState([])
-
   // Update tasks when team changes
   useEffect(() => {
     if (team && team.tasks) {
@@ -42,15 +41,15 @@ export default function TeamDashboard({
           completed: task.status == "Completed",
           assigneeProfile: assignee.profile_picture,
           assigneeName: assignee.name,
-          assigneeInitials:(assignee.name
-          ? assignee.name.substring(0, 2).toUpperCase()
-          : "NU"),
+          assigneeInitials: (assignee.name
+            ? assignee.name.substring(0, 2).toUpperCase()
+            : "NU"),
           assigneeId: assignee.id,
           submission: task.submission || null,
           submitted_date: task.submitted_date || null,
         }
       })
-
+      console.log("team from here!!", team)
       setTasks(teamTasks)
     }
   }, [team, cancelFile])
@@ -70,7 +69,7 @@ export default function TeamDashboard({
   const [newMemberName, setNewMemberName] = useState("")
 
   // Check if current user is the team leader
-  const isTeamLeader = team && team.leader.id  === currentUser.id 
+  const isTeamLeader = team && team.leader.id === currentUser.id
 
   // Function to toggle task completion status
   const toggleTaskCompletion = async (taskId) => {
@@ -282,7 +281,7 @@ export default function TeamDashboard({
                     </span>
                     <div className="task-avatar">
                       <div className="avatar-content">
-                        { task.assigneeProfile ? 
+                        {task.assigneeProfile ?
                           <img width='50' style={{ objectFit: 'cover' }} src={`http://localhost:8000/storage/${task.assigneeProfile}`} alt="" />
                           : task.assigneeInitials
                         }
@@ -302,32 +301,32 @@ export default function TeamDashboard({
         <div className="team-members-list">
           {/* Laeader Card */}
           <div className={`member-card ${team.leader.id === currentUser.id ? "current-user-card" : ""}`}>
-              <div className="member-avatar">
+            <div className="member-avatar">
 
-                <div className="avatar-content">
-                  {team.leader.profile_picture ?
-                    <img style={{ objectFit: 'cover' }} width='50' src={`http://localhost:8000/storage/${team.leader.profile_picture}`} alt="avatar" />
+              <div className="avatar-content">
+                {team.leader.profile_picture ?
+                  <img style={{ objectFit: 'cover' }} width='50' src={`http://localhost:8000/storage/${team.leader.profile_picture}`} alt="avatar" />
                   : ''
-                  }
-                </div>
+                }
               </div>
-              <div className="member-info">
-                <h4 className="member-name">
-                  {team.leader.name}
-                </h4>
-                  <p className="member-task">Leader</p>
-              </div>
-              
             </div>
-            {/* Members card */}
+            <div className="member-info">
+              <h4 className="member-name">
+                {team.leader.name}
+              </h4>
+              <p className="member-task">Leader</p>
+            </div>
+
+          </div>
+          {/* Members card */}
           {team.members.length > 0 && team.members.map((member) => (
-            
+
             <div className={`member-card ${member.id === currentUser.id ? "current-user-card" : ""}`} key={member.id}>
               <div className="member-avatar">
                 <div className="avatar-content">
                   {member.profile_picture ?
                     <img style={{ objectFit: 'cover' }} width='50' src={`http://localhost:8000/storage/${member.profile_picture}`} alt="avatar" />
-                  : ''
+                    : ''
                   }
                 </div>
               </div>
@@ -336,11 +335,13 @@ export default function TeamDashboard({
                   {member.name}
                   {member && member.id === currentUser.id && <span className="current-user-badge"> (You)</span>}
                 </h4>
-                { member.tasks.length > 0 && member.tasks.map((task, key) => 
-                  <p className="member-task" key={key}>{task.title}{key !== member.tasks.length - 1 && ", "}</p>
+                {member.tasks.length > 0 && member.tasks.map((task, key) =>
+                (task.team_id === team.id ? (
+                  <p className="member-task" key={key}>{task.title}</p>
+                ) : null)
                 )}
               </div>
-              
+
             </div>
           ))}
         </div>
