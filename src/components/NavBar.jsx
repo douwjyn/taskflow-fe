@@ -17,9 +17,7 @@ export default function NavBar({
   const [showUserDropdown, setShowUserDropdown] = useState(false)
   const [showSettingsModal, setShowSettingsModal] = useState(false)
 
-  let user= JSON.parse(localStorage.getItem('user-info'))
-  console.warn()
-  console.log(currentUser)
+  // let user= JSON.parse(localStorage.getItem('user-info'))
 
   // Add styling for notification items
   const toggleNotifications = () => {

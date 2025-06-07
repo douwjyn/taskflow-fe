@@ -106,7 +106,6 @@ function App() {
   // Handle login with proper error handling
   const handleLogin = async (credentials) => {
     try {
-      console.log("Attempting login with:", credentials)
 
       // Make API call to the Laravel backend
       const response = await fetch("http://localhost:8000/api/login", {
@@ -123,7 +122,6 @@ function App() {
 
       // Parse the response data
       const data = await response.json()
-      console.log("Login response:", data)
 
       // Check if the response contains an error message
       // if (data.error || data.message === "Email or password is not matched") {
@@ -157,7 +155,6 @@ function App() {
               : "NU"),
       }
       localStorage.setItem("user-info", JSON.stringify(data))
-      console.log("Setting user data:", user)
       setCurrentUser(user)
       setIsAuthenticated(true)
       setCurrentView("dashboard")
@@ -165,7 +162,6 @@ function App() {
       // After login, fetch initial data
       fetchInitialData(user)
     } catch (error) {
-      console.error("Login error:", error)
       // Show the error message to the user
       withReactContent(Swal).fire({
         icon: "error",
@@ -189,7 +185,6 @@ function App() {
     const user = JSON.parse(localStorage.getItem("user-info"))
     const response = await fetch(`http://localhost:8000/api/team-list/${user.user.id}`)
     const teamsData = await response.json()
-    console.log("Fetched teams:", teamsData.teams)
     setTeams(teamsData.teams)
 
 
@@ -200,7 +195,6 @@ function App() {
   const fetchAllTeams = async () => {
     const response = await fetch("http://localhost:8000/api/all-teams")
     const teamsData = await response.json()
-    console.log("Fetched all teams:", teamsData.teams)
     return teamsData.teams
   }
 
@@ -209,7 +203,6 @@ function App() {
     if (user.id) {
       const response = await fetch(`http://localhost:8000/api/user-notifications/${user.id}`)
       const notificationsData = await response.json()
-      console.log("Fetched notifications:", notificationsData)
       setNotifications(notificationsData)
     }
 
@@ -219,7 +212,6 @@ function App() {
     const user = JSON.parse(localStorage.getItem("user-info"))
     const response = await fetch(`http://localhost:8000/api/user-team-activities/${user.user.id}`)
     const activitiesData = await response.json()
-    console.log("Fetched activities:", activitiesData.activities)
     setRecentActivities(activitiesData.activities)
   }
 
@@ -268,7 +260,7 @@ function App() {
       }
 
       const data = await response.json()
-      console.log("Registration successful:", data)
+
 
       localStorage.setItem("user-info", JSON.stringify(data))
 
@@ -319,7 +311,6 @@ function App() {
     try {
       const user = localStorage.getItem("user-info")
       const userInfo = JSON.parse(user)
-      console.log("Current user:", userInfo)
       const response = await fetch("http://localhost:8000/api/team-store", {
         method: "POST",
         headers: {
@@ -342,7 +333,6 @@ function App() {
 
 
       const data = await response.json()
-      console.log("Team created successfully:", data)
 
       fetchUserTeams()
 
@@ -418,7 +408,6 @@ function App() {
       const teams = await fetchAllTeams()
 
       const teamToJoin = teams.find((team) => team.uuid.toLowerCase() === joinData.teamCode.toLowerCase())
-      console.log(teamToJoin)
 
       if (!teamToJoin) {
         throw new Error(`Team not found: ${joinData.teamCode}`)
@@ -455,7 +444,6 @@ function App() {
       })
 
       const data = await response.json()
-      console.log(data)
 
       if (data.errors) {
         throw new Error(data.message || "Failed to join team")
@@ -559,8 +547,6 @@ function App() {
     try {
 
 
-      // API call would go here: await addTeamMember(teamId, memberName)
-      console.log('kyuni', memberName);
       const response = await fetch(`http://localhost:8000/api/add-member/${teamId}`, {
         method: 'POST',
         headers: {
@@ -573,7 +559,6 @@ function App() {
       })
 
       const data = await response.json()
-      // console.log(data)
 
       if (data.errors) {
         throw new Error(data.message)
@@ -587,67 +572,8 @@ function App() {
         text: data.message,
       })
 
-      // setTeams(
-      //   teams.map((team) => {
-      //     if (team.id === teamId) {
-      //       // Create a new member object
-      //       const nameParts = memberName.split(" ")
-      //       const initials = nameParts
-      //         .map((part) => part[0])
-      //         .join("")
-      //         .toUpperCase()
-      //       const newMember = {
-      //         id: `member-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      //         name: memberName,
-      //         initials: initials,
-      //         task: "Not assigned",
-      //         isLeader: false,
-      //       }
-
-      //       // Return updated team with new member
-      //       return {
-      //         ...team,
-      //         members: [...team.members, newMember],
-      //       }
-      //     }
-      //     return team
-      //   }),
-      // )
-
-      // Add a notification for the new member
-
-      // const team = data.team
-      console.log("team::", data.team)
       setSelectedTeam(data.team)
 
-      // if (team) {
-      //   const newNotification = {
-      //     id: Date.now().toString(),
-      //     type: "invite",
-      //     team: team.name,
-      //     message: `${memberName} has been invited to the team`,
-      //     timeAgo: "Just now",
-      //   }
-      //   setNotifications([newNotification, ...notifications])
-
-      //   // Add an activity for adding a member
-      //   const newActivity = {
-      //     id: (Date.now() + 1).toString(),
-      //     team: team.name,
-      //     message: `${memberName} was invited to the team`,
-      //     timeAgo: "Just now",
-      //   }
-      //   setRecentActivities([newActivity, ...recentActivities])
-      // }
-
-      // Update the selected team if it's the one being modified
-      // console.log("selected:::", selectedTeam)
-      // if (selectedTeam && selectedTeam.id === teamId) {
-      //   const updatedTeam = teams.find((team) => data.id === teamId)
-      //   if (updatedTeam) {
-      //     setSelectedTeam(updatedTeam)
-      //   }
-      // }
     } catch (err) {
 
       withReactContent(Swal).fire({
@@ -659,13 +585,9 @@ function App() {
 
   }
 
-  // Function to assign a task to a team member
-  // BACKEND INTEGRATION: Add API call to assign task
   const handleAssignTask = async (teamId, taskData) => {
     try {
 
-      console.log(taskData)
-      // API call would go here: await assignTask(teamId, taskData)
       const response = await fetch(`http://localhost:8000/api/task-assign`, {
         method: "POST",
         headers: {
@@ -681,12 +603,10 @@ function App() {
       })
 
       if (!response.ok) {
-        // console.log("response", response)
         throw new Error(response.errors)
       }
 
       const data = await response.json()
-      console.log("Task assigned successfully:", data)
       withReactContent(Swal).fire({
         icon: 'success',
         title: 'Assigned', 
@@ -695,10 +615,9 @@ function App() {
       
       updateTeamProgress(data.team_id, data.team_name)
       setSelectedTeam(data.team)
-      console.log("hurts like hell", data.team)
 
     } catch (err) {
-      console.log(err)
+      console.err(err)
     }
 
     // API call would go here: await assignTask(teamId, taskData)
@@ -775,8 +694,6 @@ function App() {
   // BACKEND INTEGRATION: Add API call to upload file
   const handleFileUpload = async (teamId, taskId, submissionData) => {
     // API call would go here: await uploadTaskSubmission(teamId, taskId, submissionData)
-    console.log("submission: ", submissionData)
-    console.log("id: ", teamId)
 
     const formData = new FormData()
     formData.append("task_id", taskId)
@@ -865,7 +782,6 @@ function App() {
   // BACKEND INTEGRATION: Add API call to update task status
   const handleToggleTaskCompletion = async (teamId, taskId, completed) => {
     // API call would go here: await updateTaskStatus(teamId, taskId, completed)
-    console.log(`Toggling task ${taskId} completion to ${completed} for team ${teamId}`)
     const response = await fetch(`http://localhost:8000/api/task-update/${taskId}`, {
       method: "POST",
       headers: {
@@ -880,7 +796,6 @@ function App() {
       }),
     })
     const data = await response.json()
-    // console.log("Task status update response:", data)
     fetchNotifications()
     withReactContent(Swal).fire({
       icon: "success",
@@ -903,7 +818,6 @@ function App() {
     if (selectedTeam && selectedTeam.id === teamId) {
       const updatedTeam = teamsData.teams.find((team) => team.id === teamId)
       if (updatedTeam) {
-        console.log("updated team", updatedTeam)
         updateTeamProgress(updatedTeam.id, updatedTeam.name)
         setSelectedTeam(updatedTeam)
       }
@@ -930,50 +844,13 @@ function App() {
     }
   }
 
-  // const updateTeamProgress = (teamId, teamName) => {
-  //   const team = teams.find((t) => t.id === teamId)
-  //   if (!team) return
-
-  //   // Calculate completed and total tasks
-  //   const completedTasks = team.tasks.filter((task) => task.status == "Completed").length
-  //   const totalTasks = team.tasks.length
-
-
-  //   // Find if this team already has an update
-  //   const existingUpdateIndex = recentUpdates.findIndex((update) => update.team === teamName)
-  //   console.log("team", team)
-  //   if (existingUpdateIndex !== -1) {
-  //     // Update existing entry
-  //     const updatedRecentUpdates = [...recentUpdates]
-  //     updatedRecentUpdates[existingUpdateIndex] = {
-  //       ...updatedRecentUpdates[existingUpdateIndex],
-  //       progress: team.progress,
-  //       completedTasks: completedTasks,
-  //       totalTasks: totalTasks,
-  //     }
-  //     setRecentUpdates(updatedRecentUpdates)
-  //   } else {
-  //     // Add new entry and limit to 9 items
-  //     const newUpdate = {
-  //       id: Date.now().toString(),
-  //       team: teamName,
-  //       chapter: "Overall Progress",
-  //       progress: team.progress,
-  //       completedTasks: completedTasks,
-  //       totalTasks: totalTasks,
-  //     }
-  //     setRecentUpdates([newUpdate, ...recentUpdates.slice(0, 8)])
-  //   }
-  // }
 
   // Function to update user settings
   const updateUserSettings = async (updatedUser, isDarkMode) => {
     const formData = new FormData()
     formData.append("name", updatedUser.username)
     formData.append("email", updatedUser.email)
-    // console.log(updatedUser)
     formData.append("profile_picture", updatedUser.profilePic)
-    console.log(updatedUser.profilePic instanceof File) // should be true
 
     const response = await fetch(`http://localhost:8000/api/settings/${currentUser.id}`, {
       method: "POST",

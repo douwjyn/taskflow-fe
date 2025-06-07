@@ -44,7 +44,7 @@ export default function Register({ onRegister, onLoginClick }) {
         <div className="auth-form-container">
           <div className="auth-logo">
             <img src="/images/taskflow-logo.png" alt="TaskFlow Logo" className="logo-image" />
-            <div className="logo-text">TaskFlow</div>
+            <div className="logo-text"><i>TaskFlow</i></div>
           </div>
 
           <h2 className="auth-form-title">Sign up to TaskFlow</h2>

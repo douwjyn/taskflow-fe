@@ -73,7 +73,6 @@ export default function Dashboard({
           : team.due_date,
       }))
 
-    console.log("userTeamsList", teams)
 
     setModalContent({
       title: "Your Active Teams",
@@ -117,7 +116,6 @@ export default function Dashboard({
       return dateA - dateB
     })
 
-    console.log(sortedTasks)
 
     setModalContent({
       title: "Upcoming Deadlines",

@@ -2,7 +2,6 @@
 import { X } from "./icons"
 
 export default function TasksModal({ title, items, onClose, formatDate }) {
-  console.log(items)
   return (
     <div className="modal-overlay">
       <div className="modal-content tasks-modal">

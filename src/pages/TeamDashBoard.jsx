@@ -28,7 +28,6 @@ export default function TeamDashboard({
     if (team && team.tasks) {
       // Map team tasks to include assignee information
       const teamTasks = team.tasks.map((task) => {
-        console.log("task", task)
         const assignee = team.members.find((member) => member.id === task.users[0].id) || {
           initials: "TM",
           name: "Team Member",
@@ -49,7 +48,6 @@ export default function TeamDashboard({
           submitted_date: task.submitted_date || null,
         }
       })
-      console.log("team from here!!", team)
       setTasks(teamTasks)
     }
   }, [team, cancelFile])
@@ -75,12 +73,7 @@ export default function TeamDashboard({
   const toggleTaskCompletion = async (taskId) => {
     const teamId = team.id
     handleToggleTaskCompletion(teamId, taskId, !tasks.find((task) => task.id === taskId).completed)
-    // In a real app, you would also update this in the parent component/database
-    // const updatedTasks = await handleToggleTaskCompletion(teamId, taskId, !tasks.find((task) => task.id === taskId).completed)
-    // setTasks(updatedTasks)
-    // console.log("Updated tasks:", updatedTasks)
-
-    // const updatedTasks = tasks.map((task) => (task.id === taskId ? { ...task, completed: !task.completed } : task))
+    
   }
 
   // Function to handle assign task form submission
@@ -187,7 +180,6 @@ export default function TeamDashboard({
         task.id === taskId ? { ...task, submission: null, submitted_date: null } : task
       )
       setTasks(updatedTasks)
-      console.log("updated:", updatedTasks)
 
       // Call the parent component's function to update the task if needed
       if (onFileUpload) {
@@ -200,9 +192,7 @@ export default function TeamDashboard({
   if (!team) {
     return <div>No team selected</div>
   }
-  useEffect(() => {
-    console.log("dashdhahdh", team)
-  }, [team])
+
   return (
     <div className="team-dashboard">
       <div className="dashboard-header">
@@ -235,7 +225,6 @@ export default function TeamDashboard({
           ) : (
             tasks.map((task) => {
               const isAssignedToCurrentUser = task.assigneeId === currentUser.id
-              console.log("task11", task)
               return (
                 <div className="task-item" key={task.id}>
                   <div className="task-info">
