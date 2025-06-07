@@ -4,13 +4,13 @@ import { useState } from "react"
 import { X } from "./icons"
 
 export default function JoinTeamModal({ onClose, onSubmit }) {
-  const [teamName, setTeamName] = useState("")
+  const [teamCode, setTeamCode] = useState("")
   const [nickname, setNickname] = useState("")
 
   const handleSubmit = (e) => {
     e.preventDefault()
     onSubmit({
-      teamName,
+      teamCode,
       nickname,
     })
   }
@@ -26,13 +26,13 @@ export default function JoinTeamModal({ onClose, onSubmit }) {
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="teamName">Team Code</label>
+            <label htmlFor="teamCode">Team Code</label>
             <input
               type="text"
-              id="teamName"
-              placeholder="Enter team name"
-              value={teamName}
-              onChange={(e) => setTeamName(e.target.value)}
+              id="teamCode"
+              placeholder="Enter team code"
+              value={teamCode}
+              onChange={(e) => setTeamCode(e.target.value)}
               required
               className="form-control"
             />

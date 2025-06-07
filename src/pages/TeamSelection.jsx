@@ -70,6 +70,7 @@ export default function TeamSelection({ teams, onManageTeam, onCreateTeam, onJoi
                 <p className="team-info">Leader: {team.leader.name}</p>
                 <p className="team-info">Members: {team.members.length}</p>
                 <p className="team-info">Due {formatDate(team.due_date)}</p>
+                <p className="team-info">Team Code: {team.uuid}</p>
                 {isUserMember && <p className="team-member-status">You are a member</p>}
                 <button className="btn btn-manage" onClick={() => onManageTeam(team)}>
                   Manage Team

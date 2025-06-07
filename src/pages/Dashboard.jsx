@@ -157,7 +157,7 @@ export default function Dashboard({
       })
       const data = await response.json()
       const tasks = data.tasks || []
-      setActiveTeamsCount(teams.filter((team) => team.members.some((member) => member.id === currentUser.id)).length)
+      setActiveTeamsCount(teams && teams.filter((team) => team.members.some((member) => member.id === currentUser.id)).length)
       setCompletedTasksCount(tasks.filter((task) => task.status === "Completed").length)
       setPendingTasksCount(tasks.filter((task) => task.status === "Pending").length)
       setUpcomingDeadlinesCount(tasks.filter((task) => task.due_date).length)

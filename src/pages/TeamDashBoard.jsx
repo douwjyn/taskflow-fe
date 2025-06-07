@@ -40,8 +40,11 @@ export default function TeamDashboard({
           title: task.title,
           dueDate: formatDate(task.due_date) || formatDate(team.due_date),
           completed: task.status == "Completed",
-          assignee: assignee.profile_picture,
+          assigneeProfile: assignee.profile_picture,
           assigneeName: assignee.name,
+          assigneeInitials:(assignee.name
+          ? assignee.name.substring(0, 2).toUpperCase()
+          : "NU"),
           assigneeId: assignee.id,
           submission: task.submission || null,
           submitted_date: task.submitted_date || null,
@@ -149,8 +152,8 @@ export default function TeamDashboard({
 
 
     // Call the parent component's function to update the task
-    const fileUpload = await onFileUpload(selectedTask.id, submissionData)
-    if (fileUpload !== "error") {
+    const fileResponse = await onFileUpload(selectedTask.id, submissionData)
+    if (fileResponse === "success") {
       const updatedTasks = tasks.map((task) =>
         task.id === selectedTask.id ? { ...task, submission: submissionData } : task,
       )
@@ -159,7 +162,7 @@ export default function TeamDashboard({
       withReactContent(Swal).fire({
         icon: "error",
         title: "Submission Failed",
-        text: "Something went wrong!",
+        text: fileResponse,
       })
     }
 
@@ -226,14 +229,13 @@ export default function TeamDashboard({
             </div>
           )}
         </div>
-
         <div className="tasks-list">
           {tasks.length === 0 ? (
             <div className="no-tasks">No tasks assigned yet.</div>
           ) : (
             tasks.map((task) => {
               const isAssignedToCurrentUser = task.assigneeId === currentUser.id
-
+              console.log("task11", task)
               return (
                 <div className="task-item" key={task.id}>
                   <div className="task-info">
@@ -279,7 +281,10 @@ export default function TeamDashboard({
                     </span>
                     <div className="task-avatar">
                       <div className="avatar-content">
-                        <img width='50' style={{ objectFit: 'cover' }} src={`http://localhost:8000/storage/${task.assignee}`} alt="" />
+                        { task.assigneeProfile ? 
+                          <img width='50' style={{ objectFit: 'cover' }} src={`http://localhost:8000/storage/${task.assigneeProfile}`} alt="" />
+                          : task.assigneeInitials
+                        }
                       </div>
                     </div>
                   </div>
@@ -294,20 +299,47 @@ export default function TeamDashboard({
       <div className="team-members-section">
         <h3 className="section-title">Team Members</h3>
         <div className="team-members-list">
-          {team.members.map((member) => (
+          {/* Laeader Card */}
+          <div className={`member-card ${team.leader.id === currentUser.id ? "current-user-card" : ""}`}>
+              <div className="member-avatar">
+
+                <div className="avatar-content">
+                  {team.leader.profile_picture ?
+                    <img style={{ objectFit: 'cover' }} width='50' src={`http://localhost:8000/storage/${team.leader.profile_picture}`} alt="avatar" />
+                  : ''
+                  }
+                </div>
+              </div>
+              <div className="member-info">
+                <h4 className="member-name">
+                  {team.leader.name}
+                </h4>
+                  <p className="member-task">Leader</p>
+              </div>
+              
+            </div>
+            {/* Members card */}
+          {team.members.length > 0 && team.members.map((member) => (
+            
             <div className={`member-card ${member.id === currentUser.id ? "current-user-card" : ""}`} key={member.id}>
               <div className="member-avatar">
                 <div className="avatar-content">
-                  <img style={{ objectFit: 'cover' }} width='50' src={`http://localhost:8000/storage/${member.profile_picture}`} alt="avatar" />
+                  {member.profile_picture ?
+                    <img style={{ objectFit: 'cover' }} width='50' src={`http://localhost:8000/storage/${member.profile_picture}`} alt="avatar" />
+                  : ''
+                  }
                 </div>
               </div>
               <div className="member-info">
                 <h4 className="member-name">
                   {member.name}
-                  {member.id === currentUser.id && <span className="current-user-badge"> (You)</span>}
+                  {member && member.id === currentUser.id && <span className="current-user-badge"> (You)</span>}
                 </h4>
-                <p className="member-task">{member.task}</p>
+                { member.tasks.length > 0 && member.tasks.map((task, key) => 
+                  <p className="member-task" key={key}>{task.title}{key !== member.tasks.length - 1 && ", "}</p>
+                )}
               </div>
+              
             </div>
           ))}
         </div>
