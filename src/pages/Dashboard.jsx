@@ -86,6 +86,7 @@ export default function Dashboard({
     });
 
     const completedTasks = await response.json();
+    console.log("herhere", completedTasks)
     setModalContent({
       title: "Completed Tasks",
       items: completedTasks.completed_tasks,
@@ -142,7 +143,7 @@ export default function Dashboard({
       setActiveTeamsCount(teams && teams.filter((team) => team.members.some((member) => member.id === currentUser.id)).length)
       setCompletedTasksCount(tasks.filter((task) => task.status === "Completed").length)
       setPendingTasksCount(tasks.filter((task) => task.status === "Pending").length)
-      setUpcomingDeadlinesCount(tasks.filter((task) => task.due_date).length)
+      setUpcomingDeadlinesCount(tasks.filter((task) => task.due_date !== null).length)
     }
     fetchTaskCounts()
   }, [currentUser.id])

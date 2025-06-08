@@ -117,6 +117,7 @@ function App() {
         body: JSON.stringify({
           name: credentials.username,
           password: credentials.password,
+          remember_me: credentials.rememberMe
         }),
       })
 
@@ -449,11 +450,15 @@ function App() {
         throw new Error(data.message || "Failed to join team")
       }
 
+      fetchNotifications()
+
       withReactContent(Swal).fire({
         icon: "success",
         title: "Team Joined",
         text: `Successfully joined team: ${data.team.name}`,
       })
+
+
 
       // const newActivity = data.activity
       // setRecentActivities(newActivity)
@@ -615,7 +620,9 @@ function App() {
       
       updateTeamProgress(data.team_id, data.team_name)
       setSelectedTeam(data.team)
-
+      fetchRecentActivities()
+      // setTeams()
+      fetchUserTeams()
     } catch (err) {
       console.err(err)
     }
@@ -693,8 +700,6 @@ function App() {
   // Function to handle file upload for a task
   // BACKEND INTEGRATION: Add API call to upload file
   const handleFileUpload = async (teamId, taskId, submissionData) => {
-    // API call would go here: await uploadTaskSubmission(teamId, taskId, submissionData)
-
     const formData = new FormData()
     formData.append("task_id", taskId)
     formData.append("team_id", teamId)
@@ -718,6 +723,8 @@ function App() {
       return { "error": data.message }
     }
 
+    fetchNotifications()
+    fetchRecentActivities()
     withReactContent(Swal).fire({
       icon: "success",
       title: "File Uploaded",

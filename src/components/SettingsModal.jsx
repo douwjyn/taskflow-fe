@@ -104,7 +104,7 @@ export default function SettingsModal({ currentUser, onClose, darkMode: initialD
             />
           </div>
 
-          <div className="form-group theme-toggle-container">
+          {/* <div className="form-group theme-toggle-container">
             <label>Theme</label>
             <div className="theme-toggle">
               <span className={`theme-option ${!darkMode ? "active" : ""}`}>
@@ -119,7 +119,7 @@ export default function SettingsModal({ currentUser, onClose, darkMode: initialD
                 Dark
               </span>
             </div>
-          </div>
+          </div> */}
 
           <div className="form-actions">
             <button type="submit" className="btn btn-save">

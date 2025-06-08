@@ -250,7 +250,7 @@ export default function TeamDashboard({
                     {isAssignedToCurrentUser && task.submission && (
                       <button className="btn btn-cancel-upload" onClick={() => handleCancelUpload(task.id)}>
                         <X className="cancel-icon" />
-                        Cancel Upload
+                        Cancel File
                       </button>
                     )}
 
@@ -261,7 +261,7 @@ export default function TeamDashboard({
                     )}
                     {isTeamLeader && (
                       <button className="btn btn-done" onClick={() => toggleTaskCompletion(task.id)}>
-                        {task.completed ? "Mark as Incomplete" : "Mark as Done"}
+                        {task.completed ? "Mark Incomplete" : "Mark as Done"}
                       </button>
                     )}
 

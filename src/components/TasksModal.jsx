@@ -19,12 +19,13 @@ export default function TasksModal({ title, items, onClose, formatDate }) {
         ) : (
           <div className="tasks-list">
             {items.map((item, index) => {
+              console.log(item)
               return <div className="task-item-modal" key={index}>
                 <div className="task-info">
                   <h4 className="task-title">{item.title}</h4>
                   {item.team && <p className="task-team">Team: {item.team}</p>}
                   {item.name && <p className="task-team">Team: {item.name}</p>}
-                  {item.due_date && <p className="task-date">Due: {formatDate(item.due_date)}</p>}
+                  {item.due_date || item.original_due_date && <p className="task-date">Due: {formatDate(item.due_date || item.original_due_date)}</p>}
                   {item.assignee && <p className="task-assignee">Assigned to: {item.assignee}</p>}
                 </div>
                 {item.status && (
